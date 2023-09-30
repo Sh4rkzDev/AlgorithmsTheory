@@ -15,6 +15,7 @@ def main(data = None):
         if actual > longest:
             longest = actual
     print("It took: " , longest , "hs")
+    return longest
 
 if __name__ == "__main__":
     main()
