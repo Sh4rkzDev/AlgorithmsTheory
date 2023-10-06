@@ -4,7 +4,7 @@ from time import time
 import workout
 
 NUMTESTS = 10
-MINTESTS = 5000
+MINTESTS = 2000
 MAXTESTS = MINTESTS * NUMTESTS
 MIN = 1
 MAX = 100
@@ -19,21 +19,24 @@ def getGraph():
         onePerc = quant // 100
         for j in range(quant):
             earnings.append((randint(MIN, MAX)))
-            if j // onePerc == 0: energy -= 1
             energies.append(energy)
-        aux = (earnings, energy)
+            if j // onePerc == 0: energy -= 1
+        aux = (earnings, energies)
         tests.append(aux)
 
     times = []
+    numberTest = 1
     for earn, energy in tests:
         start = time()
         workout.getWorkOut(earn, energy)
         end = time()
         dt = end - start
+        print("Finished test ", numberTest)
+        numberTest += 1
         times.append(dt)
     fig, ax = plt.subplots()
     ax.plot(AX, times, label= 'Dynamic Programming')
-    ax.set(xlabel='quantity of workouts [n]', ylabel='time [ms]', title='Complexity of the algorithm')
+    ax.set(xlabel='quantity of workouts [n]', ylabel='time [s]', title='Complexity of the algorithm')
     ax.grid()
     
     plt.legend()
