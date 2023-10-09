@@ -1,35 +1,35 @@
-\section{Introducción}
+\section{Introduccion}
 
-Luego de haber ayudado a Scaloni y el equipo técnico a ordenar los análisis de los siguientes rivales de la selección \textbf{CAMPEONA DEL MUNDO}, Scaloni planteó un cronograma de entrenamiento para los jugadores, pero se cruzó con un problema: no sabe que días conviene entrenar y cuáles descansar para que los jugadores tengan la mayor ganancia posible y puedan dar el mejor desempeño en el próximo mundial. Pero que no cunda el pánico, Menotti le recomendó usar una técnica que será la que nos ayudará a resolver este problema: \textit{"Programación Dinámica"}.
+Luego de haber ayudado a Scaloni y el equipo tecnico a ordenar los analisis de los siguientes rivales de la seleccion \textbf{CAMPEONA DEL MUNDO}, Scaloni planteo un cronograma de entrenamiento para los jugadores, pero se cruzo con un problema: no sabe que dias conviene entrenar y cuales descansar para que los jugadores tengan la mayor ganancia posible y puedan dar el mejor desempenio en el proximo mundial. Pero que no cunda el panico, Menotti le recomendo usar una tecnica que sera la que nos ayudara a resolver este problema: \textit{"Programacion Dinamica"}.
 
-Ahora bien, ¿En qué consiste la \textit{Programación Dinámica}? Para entender esto, es necesario entender ciertos puntos:
+Ahora bien, ¿En qué consiste la \textit{Programacion Dinamica}? Para entender esto, es necesario entender ciertos puntos:
 \begin{itemize}
-    \item Usa una técnica de optimización llamada \textit{Memoization} (memorización en inglés). Esta técnica se basa en guardar los resultados ya calculados de un problema para poder ser reutilizados más adelante sin ser necesario que se calculen nuevamente.
-    \item El problema que se desea solucionar debe poder descomponerse en subproblemas que a su vez estos permitan construir las soluciones a problemas mas grandes.
-    \item La cantidad de subproblemas debe ser polinomial.
-    \item Esta técnica nos permite reducir la complejidad temporal de un algoritmo, evitando explorar un espacio exponencial de soluciones.
+    \item Usa una tecnica de optimizacion llamada \textit{Memoization} (memorizacion en ingles). Esta tecnica se basa en guardar los resultados ya calculados de un problema para poder ser reutilizados mas adelante sin ser necesario que se calculen nuevamente.
+    \item El problema que se desea solucioinar debe poder descomponerse en subproblemas que a su vez estos permitan construir las soluciones a problemas mas grandes.
+    \item La cantidad de subuproblemas debe ser polinomial.
+    \item Esta tecnica nos permite reducir la complejidad temporal de un algoritmo, evitando explorar un espacio exponencial de soluciones.
 \end{itemize}
-Una vez planteado esto, lo que se refiere a la \textit{Programación Dinámica} es hacer uso de la \textit{Memoization} y guardar las soluciones de los subproblemas más pequeños para poder ir construyendo las soluciones cada vez más grandes hasta llegar a dar con la solución deseada. Pero para poder aplicar esta técnica, es necesario antes saber la forma que tienen los subproblemas y cómo estos se combinan para dar solución a un problema más grande. 
-Viendo por donde viene el asunto, se nos puede venir a la cabeza la \textit{recurrencia}, y esto es correcto ya que esta técnica se sustenta gracias al uso de este método, y la solución se hallará gracias a haber descifrado la \textbf{\textit{Ecuación de Recurrencia}} del problema. Una vez obtenida, se puede plantear el problema iterativamente (en vez de hacerlo recursivo) pero siguiendo los principios de la técnica y hacer uso de la memorización. Hacerla de forma iterativa nos será de gran ayuda ya que es más fácil de entender qué es lo que está pasando y cuándo, y porque es mucho más fácil de calcular la complejidad.
+Una vez planteado esto, lo que se refiere a la \textit{Programacion Dinamica} es hacer uso de la \textit{Memoization} y guardar las soluciones de los subproblemas mas pequenios para poder ir construyendo las soluciones cada vez mas grandes hasta llegar a dar con la solucion deseada. Pero para poder aplicar esta tecnica, es necesario antes saber la forma que tienen los subproblemas y como estos se combinan para dar solucion a un problema mas grande. 
+Viendo por donde viene el asunto, se nos puede venir a la cabeza la \textit{recurrencia}, y esto es correcto ya que esta tecnica se sustenta gracias al uso de este metodo, y la solucion se hallara gracias a haber hallado la \textbf{\textit{Ecuacion de Recurrencia}} del problema. Una vez obtenida, se puede plantear el problema iterativamente (en vez de hacerlo recursivo) pero siguiendo los principios de la tecnica y hacer uso de la memorizacion. Hacerla de forma iterativa nos sera de gran ayuda ya que es mas facil de entender que es lo que esta pasando y cuando, y porque es mucho mas facil de calcular la complejidad.
 
-En nuestro problema que se nos planteó, necesitamos saber qué días conviene entrenar y cuáles no dependiendo de la ganancia obtenida del entrenamiento y la energía de los jugadores. Tuvimos en cuenta lo siguiente:
+En nuestro problema que se nos planteo, necesitamos saber que dias conviene entrenar y cuales no dependiendo de la ganancia obtenida del entrenamiento y la energia de los jugadores. Tener en cuenta lo siguiente:
 \begin{itemize}
-    \item Para el día del entrenamiento $e_i$, la energía disponible va a ser menor o igual a la del día $e_{i-1}$, por lo tanto se cumple
-    \[ s_1 >= s_2 >= ... >= s_n \]
-    siendo estas las energías disponibles para cada $e_i$ después de haber entrenado consecutivamente. La energía $s_1$ corresponde al día $e_1$.
-    \item Si se descansa un día, el primer día de volver a entrenar vuelve a tener la energía del primer día.
-    \item Si el valor del entrenamiento del día $e_i$ tiene valor $j$, y la energía disponible para ese día es $s_i$, la ganancia será del mínimo de estos dos. Es decir,
+    \item Para el dia del entrenamiento $e_i$, la energia disponible va a ser menor o igual a la del dia $e_{i-1}$, por lo tanto se cumple
+    \[ s_1 \geq s_2 \geq ... \geq s_n \]
+    siendo estas las energias disponibles para cada $e_i$ despues de haber entrenado consecutivamente. La energia $s_1$ corresponde al dia $e_1$.
+    \item Si se descansa un dia, el primer dia de volver a entrenar vuelve a tener la energia del primer dia.
+    \item Si el valor del entrenamiento del dia $e_i$ tiene valor $j$, y la energia disponible para ese dia es $s_i$, la ganancia sera del minimo de estos dos. Es decir,
     \[ Ganancia(i) = min(j, s_i) \]
 \end{itemize}
-Entonces teniendo en mente lo anterior mencionado, nuestros subproblemas serían proporcionales a la cantidad de días que hayan programados. A su vez, la forma de estos subproblemas es calcular el óptimo del día \texttt{i}, dependiendo de si conviene haber entrenado o no el día anterior, y tener en cuenta la ganancia de este día. La forma en la que los subproblemas se combinan para dar lugar a la solución de los problemas más grandes es a través de, una vez calculado los \textit{óptimos} de los días hasta \textit{i-1} y teniendo en cuenta descansos y sus ganancias, para el día \textit{i} la solución será hacer uso de la memorización de lo ya calculado y elegir la mejor opción según la \textbf{\textit{Ecuación de Recurrencia}} de nuestro problema.
+Entonces teniendo en mente lo anterior mencionado, nuestros subproblemas serian proporcionales a la cantidad de dias que hayan programados. A su vez, la forma de estos subproblemas es calcular el optimo del dia \texttt{i} dependiendo de si conviene haber entrenado o no el dia anterior y tener en cuenta la ganancia de este dia. La forma en la que los subproblemas se combinan para dar lugar a la solucion de los problemas mas grandes es a traves de, una vez calculado los \textit{optimos} de los dias hasta \textit{i-1} y teniendo en cuenta descansos y sus ganancias, para el dia \textit{i} la solucion sera hacer uso de la memorizacion de lo ya calculado y elegir la mejor opcion segun la \textbf{\textit{Ecuacion de Recurrencia}} de nuestro problema.
 
-Para definir nuestra ecuación de recurrencia, planteamos lo siguiente:
+Para definir nuestra ecuacion de recurrencia, planteamos lo siguiente:
 \begin{itemize}
-    \item Para el primer día, la ganancia va a ser el mínimo entre la energía de ese día y el valor del entrenamiento.
-    \item Para el segundo día, va a depender de si conviene haber entrenado el primer día y obtener la ganancia del entrenamiento como si fuera el primer día de haber entrenado, o continuar entrenando después del primer día pero \textbf{no} con la energía que tendrían disponible los jugadores si hubieran descansado.
-    \item Para el entrenamiento $e_i$, el óptimo sería el que maximiza la ganancia entre haber entrenado el día $e_{i-1}$ y tener menos energía disponible para obtener la ganancia de ese día, o no haber entrenado el día anterior y tener la posibilidad de obtener más ganancia teniendo más energía disponible.
+    \item Para el primer dia, la ganancia va a ser el minimo entre la energia de ese dia y el valor del entrenamiento.
+    \item Para el segundo dia va a depender de si conviene haber entrenado el primer dia y obtener la ganancia del entrenamiento como si fuera el primer dia de haber entrenado o continuar entrenando despues del primer dia pero \textbf{no} con la energia que tendrian disponible los jugadores si hubieran descansado.
+    \item Para el entrenamiento $e_i$, el optimo seria el que maximiza la ganancia entre haber entrenado el dia $e_{i-1}$ y tener menos energia disponible para obtener la ganancia de ese dia, o no haber entrenado el dia anterior y tener la posibilidad de obtener mas ganancia teniendo mas energia disponible.
 \end{itemize}
-Entonces teniendo todo esto en mente, nuestra ecuación de recurrencia tendría la siguiente forma:
+Entonces teniendo todo esto en mente, nuestra ecuacion de recurrencia tendria la siguiente forma:
 
 INSERTAR FOTO ECUACION RECURRENCIA!!!!!!!!!!!!!!!!!!!
 

@@ -4,15 +4,22 @@ A continuación se detallan el código y los pasos que se siguieron para llevar 
 
 \subsection{Obtener el cronograma}
 
-Una vez que se obtuvieron los datos para los entrenamientos y la energia disponible dependiendo la cantidad de dias seguidos de haber entrenado, se arma una matriz de tamanio $NxN$ siendo $N$ la cantidad de dias en el cronograma:
+Una vez que se obtuvieron los datos para los entrenamientos y la energia disponible dependiendo la cantidad de dias seguidos de haber entrenado, se arma una matriz de tamanio $n \times n$ siendo $n$ la cantidad de dias en el cronograma:
 
 \lstinputlisting[language=Python]{code/workout.py}
 
+El algoritmo se basa en crear una matriz de $n \times n$ siendo $n$ la cantidad de dias. ¿Porque una matriz y no un simple arreglo? En este problema, tenemos que considerar no solo una variable a la hora de buscar los optimos sino dos. Una sera la ganancia del entrenamiento, y la otra la cantidad de energia que tendremos ese dia dependiendo si es el primer dia que entrenamos desde el ultimo descanso, o el segundo, etc. Entonces la forma que planteamos es usar la energia para cada dia como filas, y la ganancia de cada entrenamiento como la columna.
 
-## POR ACA
+A la hora de calcular los optimos para cada dia, se seguira el siguiente algoritmo:
+\begin{itemize}
+    \item Si el dia $e_i$ es el primero que se entrena desde un descanso (fila uno), hay que obtener el optimo del dia $e_{i-2}$ ya que el anterior se supone que se descanso.\footnote{Esto solo es valido para los entrenamientos pasados el segundo dia.}
+    \item Si el dia $e_i$ es el segundo que se entrena desde un descanso (fila dos), habra que sumar a la ganancia del dia $e_{i-1}$ la del dia actual teniendo en cuenta la energia que se redujo respecto el primer dia, pues recordemos 
+    \[ s_1 \geq s_2 \geq ... \geq s_n\]
+    \item Para el dia $e_i$ la cantidad maxima de posibles entrenamientos es $i$, ya que siempre el optimo es respecto a los dias descansados como la ganancia de ese entrenamiento, y estos son proporcionales a la cantidad de dias, lo que nos resulta en una matriz cuadrada.
+\end{itemize}
+
+A su vez, esta forma de resolver el problema nos resultara en una matriz triangular, ya que la cantidad maxima de filas es la cantidad de dias y lo mismo con los entrenamientos, pero el entrenamiento del dia $e_i$ completara hasta maximo $i$ filas, dejando el resto de las filas hasta $n$ en 0.
+
+Respecto a la complejidad del algoritmo, todas las operaciones que se hacen son constantes, pues acceder a una posicion especifica de un arreglo, hacer comparaciones, y asignar valores son $\mathcal{O}(1)$. Pero al mismo tiempo, cada una de estas operaciones se realizan $i$ veces para el entrenamiento $e_i$. Y para cada entrenamiento, se realiza $i$ veces para la energia de cada posible situacion de los dias seguidos entrenado, pues por cada entrenamiento $e_i$ tengo que considerar la ganancia para la energia $s_1, s_2, ..., s_i$, formando asi la matriz triangular. Considerando todo esto, la complejidad final del algoritmo es $\mathcal{O}(n \times n) = \mathcal{O}(n^2)$ 
 
 
-
-La complejidad del algoritmo para ordenar todos los datos es $\mathcal{O}\left(n \log n\right)$, ya que el método \textit{sort} de Python tiene esa complejidad (\href{https://www.geeksforgeeks.org/sort-in-python/}{complejidad del método \textit{sort}}) y la función auxiliar que usa como \textit{key} para ordenar es $\mathcal{O}(1)$. Luego, recorrer todo los datos ya ordenados e ir procesando la información es $\mathcal{O}(n)$, ya que solo recorre el arreglo y va sumando los valores correspondientes a las variables declaradas, y eso es $\mathcal{O}(1)$. La complejidad final es $\mathcal{O}\left(n \log n + n\right)$.
-
-La variable \textit{total} se utiliza para ir contabilizando el tiempo que tarda Scaloni, sumando el tiempo del video que está analizando en el momento más todos los ya analizados. A su vez, tenemos la variable \textit{actual}, que se encarga de guardar el tiempo que va a requerir el video que se está analizando actualmente, que es la suma del tiempo que se lleva en total más la que vaya a tardar el ayudante. Y por último tenemos la variable \textit{longest}, que se encarga de almacenar el video que vaya a tardar más en analizarse. Es necesaria ya que nada nos garantiza que el último ayudante vaya a ser el que más influencia en el tiempo total de los análisis de los videos. Un ejemplo para mostrar esto es ir a la exageración: Que el primer video de todos, el ayudante tarde 5 meses. Por más que el último tarde 2 hs, la duración total va a ser lo que tarde el analisis que más se aleje de los ya terminados, tanto por Scaloni y los demás ayudantes.
