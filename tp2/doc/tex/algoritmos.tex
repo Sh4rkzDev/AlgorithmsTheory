@@ -8,18 +8,35 @@ Una vez que se obtuvieron los datos para los entrenamientos y la energía dispon
 
 \lstinputlisting[language=Python]{code/workout.py}
 
-El algoritmo se basa en crear una matriz de $n \times n$ siendo $n$ la cantidad de dias. ¿Por qué una matriz y no un simple arreglo? En este problema, tenemos que considerar no solo una variable a la hora de buscar los óptimos, sino dos. Una será la ganancia del entrenamiento, y la otra la cantidad de energía que tendremos ese día dependiendo si es el primer día que entrenamos desde el último descanso, o el segundo, etc. Entonces la forma que planteamos es usar la energía para cada día como filas, y la ganancia de cada entrenamiento como las columnas.
+El algoritmo se basa en crear una matriz de $(n \times n)$ siendo $n$ la cantidad de días. ¿Porque una matriz y no un simple arreglo? En este problema, tenemos que considerar no solo una variable a la hora de buscar los óptimos sino dos. Una será la ganancia del entrenamiento, y la otra la cantidad de energía que tendremos ese día dependiendo si es el primer dia que entrenamos desde el último descanso, o el segundo, etc. Entonces la forma que planteamos es usar la energía para cada dia como filas, y la ganancia de cada entrenamiento como la columna.
 
-A la hora de calcular los óptimos para cada día, se seguirá el siguiente algoritmo:
+A la hora de calcular los óptimos para cada dia, se seguirá el siguiente algoritmo:
 \begin{itemize}
-    \item Si el dia $e_i$ es el primero que se entrena desde un descanso (fila uno), hay que obtener el óptimo del día $e_{i-2}$, ya que el anterior se supone que se descansó.\footnote{Esto solo es válido para los entrenamientos pasados el segundo día.}
-    \item Si el día $e_i$ es el segundo que se entrena desde un descanso (fila dos), habrá que sumar a la ganancia del día $e_{i-1}$ la del día actual teniendo en cuenta la energía que se redujo respecto el primer día, pues recordemos 
-    \[ s_1 \geq s_2 \geq ... \geq s_n\]
-    \item Para el dia $e_i$ la cantidad máxima de posibles entrenamientos es $i$, ya que siempre el óptimo es respecto a los dias descansados como la ganancia de ese entrenamiento, y estos son proporcionales a la cantidad de días, lo que nos resulta en una matriz cuadrada.
+	\item Si el dia $e_i$ es el primero que se entrena desde un descanso ($s_1$), hay que obtener el óptimo del dia $e_{i-2}$ ya que el anterior se supone que se descanso.\footnote{Esto solo es valido para los entrenamientos pasados el segundo dia.}
+	\item Si el dia $e_i$ es el segundo que se entrena desde un descanso (fila dos), habrá que sumar a la ganancia del dia $e_{i-1}$ la del dia actual teniendo en cuenta la energía que se redujo respecto el primer dia, pues recordemos
+	\[ s_1 \geq s_2 \geq ... \geq s_n\]
+	\item Para el dia $e_i$ la cantidad máxima de posibles entrenamientos es $i$, ya que siempre el óptimo es respecto a los días descansados como la ganancia de ese entrenamiento, y estos son proporcionales a la cantidad de días, lo que nos resulta en una matriz cuadrada.
 \end{itemize}
 
-A su vez, esta forma de resolver el problema nos resultará en una matriz triangular, ya que la cantidad máxima de filas es la cantidad de días y lo mismo con los entrenamientos, pero el entrenamiento del día $e_i$ completara hasta máximo $i$ filas, dejando el resto de las filas hasta $n$ en 0.
+A su vez, esta forma de resolver el problema nos resultara en una matriz triangular, ya que la cantidad máxima de filas es la cantidad de días y lo mismo con los entrenamientos, pero el entrenamiento del dia $e_i$ completará hasta maximo $i$ filas, dejando el resto de las filas hasta $n$ en 0.
 
-Respecto a la complejidad del algoritmo, todas las operaciones que se hacen son constantes, pues acceder a una posición específica de un arreglo, hacer comparaciones, y asignar valores son $\mathcal{O}(1)$. Pero al mismo tiempo, cada una de estas operaciones se realizan $i$ veces para el entrenamiento $e_i$. Y para cada entrenamiento, se realiza $i$ veces para la energía de cada posible situación de los días seguidos entrenados, pues por cada entrenamiento $e_i$ tengo que considerar la ganancia para la energía $s_1, s_2, ..., s_i$, formando así la matriz triangular. Considerando todo esto, la complejidad final del algoritmo es $\mathcal{O}(n \times n) = \mathcal{O}(n^2)$ 
+Respecto a la complejidad del algoritmo, todas las operaciones que se hacen son constantes, pues acceder a una posición específica de un arreglo, hacer comparaciones, y asignar valores son $\mathcal{O}(1)$. Pero al mismo tiempo, cada una de estas operaciones se realizan $i$ veces para el entrenamiento $e_i$. Y para cada entrenamiento, se realiza $i$ veces para la energía de cada posible situación de los días seguidos entrenando, pues por cada entrenamiento $e_i$ tengo que considerar la ganancia para la energia $s_1, s_2, ..., s_i$, formando así la matriz triangular. Considerando todo esto, la complejidad final del algoritmo es $\mathcal{O}(n \times n) = \mathcal{O}(n^2)$.
+
+\subsection{Reconstruir cronograma}
+
+Para reconstruir el cronograma se implementó el siguiente algoritmo:
+
+\lstinputlisting[language=Python]{code/schedule.py}
+
+Para reconstruir la solución se siguió el siguiente razonamiento:
+
+\begin{enumerate}
+	\item Se iterará de adelante para atrás, de manera de saber si se entreno el dia $e_{i-1}$ o no dependiendo del óptimo del dia $e_i$
+	\item Se buscará en que dia consecutivo se ejercitó el último entrenamiento ($e_i$). Recordemos que para esto, habrá que iterar la última columna de la matriz de arriba hacia abajo, hasta que el elemento en la posición $s_i$ difiera del elemento $s_{i-1}$ (dentro de la misma columna).
+	\item Empezaremos a bajar de forma "escalonada", es decir, bajando una posición y yendo para la izquierda en otra.
+	\item Si llegamos a la fila 0, significa que ese día es el primero luego de haber descansado, así que el anterior día no se entrenó y el último entrenamiento fue el anterior a este último. Volvemos al paso 2.
+	\item En caso de haber llegado a la primer columna, terminará la reconstrucción.
+\end{enumerate}
+
 
 

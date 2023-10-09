@@ -1,4 +1,3 @@
-import input
 
 def getWorkOut(earn, energy):
     matrix = []
@@ -16,12 +15,6 @@ def getWorkOut(earn, energy):
             arr[i] = max(contWorkOut, lastWorkOut)
         matrix.append(arr)
 
-    print(matrix[len(earn)-1][len(energy)-1])
+    print("Highest possible profit: ", matrix[len(earn)-1][len(energy)-1])
     return matrix
 
-def main():
-    earn, energy = input.ReadInputs()
-    getWorkOut(earn, energy)
-
-if __name__ == "__main__":
-    main()
