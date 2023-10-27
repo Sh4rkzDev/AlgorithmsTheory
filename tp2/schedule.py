@@ -1,4 +1,3 @@
-
 def getSchedule(matrix):
     res = [""] * len(matrix)
     i = len(matrix) - 1

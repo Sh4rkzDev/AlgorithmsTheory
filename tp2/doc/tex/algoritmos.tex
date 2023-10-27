@@ -8,6 +8,13 @@ Una vez que se obtuvieron los datos para los entrenamientos y la energía dispon
 
 \lstinputlisting[language=Python]{code/workout.py}
 
+siendo:
+\begin{itemize}
+    \item $e$: valor de la ganancia del entrenamiento.
+    \item $idx$: fila actual que se esta iterando. En nuestra matriz, las filas son los entrenamientos.
+    \item $i$: columna actual que se esta considerando. En nuestra matriz, las columnas son las energias disponibles para los dias segun los dias seguidos se haya entrenado.
+\end{itemize}
+
 El algoritmo se basa en crear una matriz de $(n \times n)$ siendo $n$ la cantidad de días. ¿Porque una matriz y no un simple arreglo? En este problema, tenemos que considerar no solo una variable a la hora de buscar los óptimos sino dos. Una será la ganancia del entrenamiento, y la otra la cantidad de energía que tendremos ese día dependiendo si es el primer dia que entrenamos desde el último descanso, o el segundo, etc. Entonces la forma que planteamos es usar la energía para cada dia como filas, y la ganancia de cada entrenamiento como la columna.
 
 A la hora de calcular los óptimos para cada dia, se seguirá el siguiente algoritmo:

@@ -1,4 +1,3 @@
-
 def getWorkOut(earn, energy):
     matrix = []
 
@@ -7,8 +6,7 @@ def getWorkOut(earn, energy):
         for i in range(idx+1):
             gain = min(e, energy[i])
             if i == 0:
-                prevTwoDays = matrix[idx-2][idx-2] + gain if idx > 1 else 0
-                arr[i] = max(prevTwoDays, gain)
+                arr[i] = matrix[idx-2][idx-2] + gain if idx > 1 else gain
                 continue
             contWorkOut = matrix[idx-1][i-1] + gain if idx > 0 else 0
             lastWorkOut = arr[i-1]
@@ -17,4 +15,3 @@ def getWorkOut(earn, energy):
 
     print("Highest possible profit: ", matrix[len(earn)-1][len(energy)-1])
     return matrix
-

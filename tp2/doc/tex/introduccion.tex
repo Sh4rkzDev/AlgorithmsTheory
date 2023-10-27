@@ -49,4 +49,5 @@ Consideraciones a tener en cuenta:
     	\item En el dia $1$ no habrá días anteriores, por lo que la única posible ganancia de ese día estará dada por el valor de $v_1$.
     	\item En el dia $2$, ya que no tendra dos días atrás para ver la ganancia de dicho dia. Entonces sus únicas dos posibilidades del óptimo es no haber entrenado el día $1$ y tener la ganancia del mínimo entre $e_2$ y $s_1$, o haber entrenado el día anterior y tener el optimo como indica la ecuación.
 	\end{enumerate}
+    \item La tercera opción es necesaria ya que puede pasar que a medida que avanzan los entrenamientos y en especial los entrenamientos que vayan varios días seguidos, las ganancias totales de esas planificaciones empiecen a empeorar respecto entrenamientos con otra planificación. Por ejemplo, puede pasar que para mi entrenamiento $7$ luego de haber entrenado los 7 días seguidos, la ganancia total tenga un valor de $240$, pero el valor de la ganancia si hubiera descansado el primer dia y por lo tanto habiendo empezado a entrenar el segundo con un dia mas de descanso puede ser mayor a $240$, y este resultado se perdería si no se lo considera.
 \end{itemize}
