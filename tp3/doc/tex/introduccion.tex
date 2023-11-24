@@ -1,0 +1,69 @@
+\section{Introducción}
+
+Luego de haber ayudado a Scaloni y el equipo técnico a no solo ordenar los análisis de los siguientes rivales sino tambien elegir el mejor cronograma de entrenamientos de la selección \textbf{CAMPEONA DEL MUNDO}, Scaloni comenzo a armar la plantilla para el mundial 2026 que traera la $4ta$ a casa \textbf{(se anula todo tipo de mufa)}. A su vez, la prensa esta metiendo presion y cada medio esta dando su conjunto de jugadores que les gustaria ver jugar con la albiceleste. Ante esta presion, Scaloni se topo con el problema de querer encontrar la minima cantidad de jugadores para contentar a todos. Con tener un jugador que contente a cada medio le es suficiente.
+Como no podia ser de otra manera, el gran Bilardo, astuto pues ya se conoce todos los problemas con la prensa, le comenta que este no es mas que un caso particular del $Hitting Set Problem$, el cual es:
+\textit{Dado un conjunto $A$ de $n$ elementos y $m$ subconjuntos $B_1, B_2, ..., B_m$ de $A$ ($B_i \subseteq A \forall i$) , queremos el subconjunto $C \subseteq A$ de menor tamaño tal que $C$ tenga al menos un elemento de cada $B_i$ (es decir, $C \cap B_i \neq \emptyset$)}.
+En nuestro caso, $A$ son los jugadores convocados, los $B_i$ son los deseos de la prensa, y $C$ es el conjunto de jugadores que deberían jugar si o si en la seleccion.
+Scaloni solicita nuestra ayuda para ver si este subconjunto de jugadores se puede obtener edicientemente, es decir, en tiempo polinomial, o se nos complicara obtener dicho subconjunto mas de lo que se pretende.
+
+Ahora bien, ¿Que significa eso de \textit{"tiempo polinomial"}? ¿Existe algo "peor"? ¿Adonde puede llegar todo esto? Vamos de a poco.
+En el mundo de la teoria de la complejidad computacional existe lo que se conoce como \textit{Clases de Complejidad}. Segun \href{https://es.wikipedia.org/wiki/Clase_de_complejidad}{Wikipedia}, la definicion es la siguiente: 
+\begin{quote}
+En teoría de la complejidad computacional, una clase de complejidad es un conjunto de problemas de decisión de complejidad relacionada. Una clase de complejidad tiene una definición de la forma: 
+
+\textit{el conjunto de los problemas de decisión que pueden ser resueltos por una máquina M utilizando O(f(n)) del recurso R (donde n es el tamaño de la entrada)}. 
+\end{quote}
+
+Existen diversas clases de complejidad, y aqui se enumeran algunas de ellas:
+\begin{itemize}
+	\item \texttt{P}: problemas que se resuelven en tiempo polinomial, es decir, son bastantes eficientes.
+	\item \texttt{NP}: problemas que sus soluciones se pueden verificar en tiempo polinomial. Con esto podemos afirmar que todo problema que esta en P, tambien esta en NP, ya que si encontramos la solucion en tiempo polinomial, tambien la podremos validar en tiempo polinomial\footnote{Aclarar que no vale su inversa, ya que no todo problema de $NP$ se encuentra en $P$, por lo que $NP$ \not\subset  $P$.}.
+    \[ P \subset NP\]
+	\item \texttt{NP-Completos}: problemas de decision los cuales la respuesta pueden ser "si" o "no" dependiendo si se puede resolver el problema. Estos problemas son los mas dificiles de los problemas que se pueden verificar su solucion en tiempo polinomial, es decir, los mas dificiles de lo NP.
+    Por lo tanto,
+    \[ P \subset NP \subseteq NP-Completos\]
+	\item \texttt{PSPACE}: problemas que para encontrar su solucion se requiere un espacio polinomial de memoria.
+\end{itemize}
+Ahora bien, si hablamos de clases de complejidad y problemas NP-Completos, tambien debemos hablar de $Reducciones$. Segun \href{https://es.wikipedia.org/wiki/Reducci%C3%B3n_(complejidad)}{Wikipedia}:
+\begin{quote}
+    En teoría de la computación y teoría de la complejidad computacional, una reducción es una transformación de un problema a otro problema. Dependiendo de la transformación usada, la reducción se puede utilizar para definir clases de complejidad en un conjunto de problemas.
+
+    Intuitivamente, un problema $A$ es reducible a un problema $B$ si las soluciones de $B$ existen y dan una solución para $A$ siempre que $A$ tenga solución. Así, resolver $A$ no puede ser más difícil que resolver $B$. Normalmente, esto se expresa de la forma \[A \leq B\], y se añade un subíndice en $\le$ para indicar el tipo de reducción utilizada. Por ejemplo, se usa la letra $p$ como subíndice para indicar que la reducción puede realizarse en tiempo polinomial: \[A \leq _p B\]
+\end{quote}
+
+En otras palabras, si reducimos un problema $A$ a un problema $B$, resolver el problema $A$ sera como mucho tan dificil de resolver como el problema $B$. Esto va a ser de gran utilidad, ya que se ha demostrado distintos problemas que son \texttt{NP-Completos}, y muchas veces para poder demostrar esto se ha utilizado y se puede utilizar la propiedad de transitividad, que es que si tengo un problema $A$ tal que $A$ \in \texttt{NP-Completos}, y un problema $B$ que desconozco su dificultad pero pertenece a $NP$, en caso que logre reducir $A$ a $B$, $B$ tambien es \texttt{NP-Completos}. Es decir
+
+\[ A \in {NP-C}: A \leq _p B \Rightarrow B \in NP-C \]
+
+\subsection{Hitting-Set Problem}
+
+Volviendo al problema del Hitting-Set Problem, empecemos por ver si este pertenece a \texttt{NP}. Para ello, recordemos que los problemas pertenecientes a NP son aquellos los cuales se pueden verificar su solucioin en tiempo polinomial. Para este caso, Hitting-Set Problema \in \texttt{NP} de la siguiente manera: dado un conjunto $C$ como solucion al problema y un conjunto $A$ con todos los elementos, y subconjuntos $B_i$ tal que \forall $B_i$: $B_i$ \subseteq $A$, es sencillo verificar que la solucion es valida siguiendo los siguientes pasos: para cada $B_i$ verificar que al menos uno de sus elementos esta en el conunto $C$. En caso que haya un $B_i$ donde no este ninguno de sus elementos en $C$, la solucion no sera valida. Por lo tanto, la complejidad para verificar la solucion sera $\mathcal{O}(n \times m)$ siendo $n$ la cantidad de subconjuntos $B$, y $m$ la cantidad de elementos de cada subconjunto. Por lo tanto, la verificacion de la solucion \subset \texttt{P} \Rightarrow Hitting-Set Problem \in \texttt{NP}.
+
+Supongamos que tenemos el conjunto $A = (1, 2, 3, 4, 5, 6, 7, 8, 9, 10)$, y los subconjuntos $B = ((1, 2), (3, 4), (5, 6), (7, 8), (9, 10))$, y el conjunto solucion $C = (1, 3, 6, 7)$. La verificacion tendra el siguiente formato:
+
+\begin{lstlisting}[language=Python]
+if len(C) > len(B): return false
+for subconjunto in B:
+    hay_un_elemento = false
+    for elemento in subconjunto:
+        if elemento in C:
+            hay_un_elemento = true
+    if not hay_un_elemento: return false
+return true
+\end{lstlisting}
+
+La primera linea hace referencia a la validez de que es el conjunto minimo que abarca todos al menos un elemento de todos los subconjuntos. Ya que si tengo N subconjuntos, la cantidad maxima que debo tener como solucion debe ser N elementos (esto es asi ya que el peor de los casos es que todos los subconjuntos no compartan ningun elemento).
+
+Siguiendo con el ejemplo, la verificacion devolvdera false ya que no hay ningun elemento en el conjunto $C$ que represente el subconjunto $(9, 10)$.
+
+Continuando con el problema del Hitting-Set, ¿Es posible que Hitting-Set \in \texttt{NP-Completo}?
+Para que se cumpla eso, podemos aprovecharnos de la propiedad de transitividad y reducir polinomialmente un prooblema que sabemos que es \texttt{NP-Completo} a Hitting-Set. Ahora bien, tenemos que encontrar un problema el cual nos pueda facilitar esta transformacion (siempre y cuando exista la posibilidad de que Hitting-Set sea NP-Completo).
+
+Para ello, usaremos el problema del Independent-Set (prueba que es \href{https://www.geeksforgeeks.org/proof-that-independent-set-in-graph-theory-is-np-complete/}{\texttt{NP-Completo}}. Independent Set es un problema sobre teoria de grafos el cual dado un grafo G, buscara maximizar la cantidad de vertices los cuales no sean adyacentes, es decir, no haya una arista que los una. Ahora esta la pregunta, ¿Como podemos hacer para modelar un grafo de tal manera que haciendo uso del Independent Set, devuelva si existe o no una solucion al problema del Hitting-Set de tamanio como mucho $k$? 
+
+En el Hitting-Set, lo que nos "condiciona" es que para cada conjunto, haya al menos un representante, y buscar el conjunto solucion tal que sea minimo. Por el otro lado, en el Independent Set, lo que nos condiciona es en un grafo, que los vertices de la solucion no sean adyacentes, y buscara maximizar la cantidad de vertices que cumplan con esto. Empecemos por lo basico: modelar el grafo.
+
+Ya que con lo que debemos cumplir son los subconjuntos $B_i$, que haya la menos un elemento de cada uno, seria acorde que los vertices de nuestro grafo sean los elementos de cada $B_i$. Tener en cuenta que si un subconjunto $B_i$ comparte elemento con un subconjunto $B_j$, el vertice sera uno unico y no habra duplicados. Falta lo importante y la parte clave: como relacionar estos vertices de manera que al pasar el grafo a nuestra "caja negra" que resuelve un Independent Set, nos devuelva que puede existir solucion de como mucho $N$ elementos, siendo $N$ la cantidad de subconjuntos. La conexion sera de la siguiente manera:
+\begin{itemize}
+    \item Para cada subconjunto una vez creado los vertices, se uniran los vertices entre todos los pertenecientes al mismo subconjunto
+\end{itemize}
