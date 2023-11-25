@@ -1,6 +1,7 @@
 import input
-import greedy
 import bt
+import greedy
+import lp
 from time import time
 
 def compareAlgorithms():
@@ -32,6 +33,16 @@ def compareAlgorithms():
     print(f'Time: {endBT - startBT} seconds')
     print("------------------------------")
 
+    startLP = time()
+    resLP = lp.solution_lp(dataset)
+    endLP = time()
+
+    print("------------------------------")
+    print("Linear Programming:")
+    print("")
+    print(f'Solution: {len(resLP)}')
+    print(f'Time: {endLP - startLP} seconds')
+    print("------------------------------")
 
 if __name__ == "__main__":
     compareAlgorithms()

@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 from time import time
 import bt
 import greedy
+import lp
 import input
 
 AX = [5, 7, 10, 15, 20, 50, 75, 100, 200]
@@ -10,6 +11,8 @@ def getGraph():
     tests = ["5.txt", "7.txt", "10_varios.txt", "15.txt", "20.txt", "50.txt", "75.txt", "100.txt", "200.txt"]
     timesBT = []
     timesGreedy = []
+    timesLP = []
+
     for path in tests:
         dataset = input.ReadInputs("tests/" + path)
 
@@ -23,8 +26,14 @@ def getGraph():
         endBT = time()
         timesBT.append(endBT - startBT)
 
+        startLP = time()
+        lp.solution_lp(dataset)
+        endLP = time()
+        timesLP.append(endLP - startLP)
+
     fig, ax = plt.subplots()
     ax.plot(AX, timesBT, label= 'Backtracking Algorithm')
+    ax.plot(AX, timesLP, label= 'Linear Programming Algorithm')
     ax.plot(AX, timesGreedy, label= 'Greedy Algorithm')
     ax.set(xlabel='quantity of requests [n]', ylabel='time [s]', title='Complexity of algorithms')
     ax.grid()
