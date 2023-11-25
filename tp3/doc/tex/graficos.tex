@@ -1,10 +1,10 @@
 \section{Mediciones}
 
-Se realizaron mediciones en base a crear pruebas de distintos tamaños y tomar su tiempo de ejecución individualmente, y en base a los datos recolectados hacer el gráfico. Los datos fueron desde 2000 hasta 20.000 elementos, los cuales las ganancias de cada entrenamiento fue generada aleatoriamente entre valores de 1 y 100, y para las energías fueron decayendo en porcentajes. Es decir, el 1\% del total fue 100, otro 99, otro 98... hasta llegar a 1. De esta manera, nos aseguramos de que cada día seguido entrenando cumple con la condición de que la energía de ese día es \textbf{menor o igual} al anterior.
+Se realizaron mediciones en base a distintos sets de pruebas que fueron desde 5 elementos hasta 200 elementos. Para cada set, se ejecutó el algoritmo por \textbf{Backtracking}, el algoritmo utilizando \textbf{Programación Lineal}, y por último el algoritmo por \textbf{Greedy}.
 
 \begin{figure}[H]
-    \centering
-    \includegraphics[width=0.9\textwidth]{img/graphic.png}
+	\centering
+	\includegraphics[width=0.9\textwidth]{img/graphic.png}
 \end{figure}
 
-Como se puede apreciar, el algoritmo planteado con \textit{Programación Dinámica} efectivamente cumple con la complejidad indicada anteriormente, ya que su diferencia con la complejidad de $\mathcal{O}(n \times n)$ es casi nula\footnote{Aclaración: para la complejidad indicada por la traza perteneciente a $\mathcal{O}(n \times n)$, se ha dado cierto valor al parámetro $a$ en la ecuación $y=ax^2$ ya que sino para 20.000 elementos el valor $y$ sería igual a 400.000.000, haciendo parecer que nuestro algoritmo es constante.}.
+Como se puede apreciar, el algoritmo planteado por \textit{Backtracking} es el algoritmo que más tarda con diferencia, haciendo honor a su complejidad respecto a los otros dos. Por detrás de él, está el algoritmo usando la técnica \textit{Greedy}, la cual puede variar su complejidad dependiendo que tan enfocado esté en conseguir el óptimo y en que se base su regla para obtener los óptimos. Esto puede variar tanto su complejidad como qué tan lejos del resultado óptimo se encuentre. Y por último, el algoritmo que más rápido parece haber logrado con diferencia fue el usado con \textit{Programación Lineal}. No solo ha conseguido ser el más rápido, sino que a su vez logró dar la respuesta óptima al problema. Observar que el algoritmo aproximado por \textit{Programacion Lineal} es despreciable en cuanto a lo que tardo, al menos lo que se puede observar en el grafico. Pero los resultados en cuanto a la optimalidad de la solucion difieren cada vez mas en cuanto los subconjuntos son mayores.

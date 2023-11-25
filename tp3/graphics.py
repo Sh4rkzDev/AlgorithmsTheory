@@ -3,6 +3,7 @@ from time import time
 import bt
 import greedy
 import lp
+import lpa
 import input
 
 AX = [5, 7, 10, 15, 20, 50, 75, 100, 200]
@@ -12,6 +13,7 @@ def getGraph():
     timesBT = []
     timesGreedy = []
     timesLP = []
+    timesLPA = []
 
     for path in tests:
         dataset = input.ReadInputs("tests/" + path)
@@ -31,9 +33,15 @@ def getGraph():
         endLP = time()
         timesLP.append(endLP - startLP)
 
+        startLPA = time()
+        lpa.solution_lp_approx(dataset)
+        endLPA = time()
+        timesLPA.append(endLPA - startLPA)
+
     fig, ax = plt.subplots()
     ax.plot(AX, timesBT, label= 'Backtracking Algorithm')
     ax.plot(AX, timesLP, label= 'Linear Programming Algorithm')
+    ax.plot(AX, timesLPA, label= 'Linear Programming (Approximated) Algorithm')
     ax.plot(AX, timesGreedy, label= 'Greedy Algorithm')
     ax.set(xlabel='quantity of requests [n]', ylabel='time [s]', title='Complexity of algorithms')
     ax.grid()
@@ -43,9 +51,5 @@ def getGraph():
     fig.savefig('graphic.png')
     plt.show()
 
-def main():
-    getGraph()
-
 if __name__ == "__main__":
-    main()
-
+    getGraph()

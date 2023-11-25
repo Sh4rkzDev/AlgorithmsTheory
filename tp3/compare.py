@@ -2,6 +2,7 @@ import input
 import bt
 import greedy
 import lp
+import lpa
 from time import time
 
 def compareAlgorithms():
@@ -42,6 +43,17 @@ def compareAlgorithms():
     print("")
     print(f'Solution: {len(resLP)}')
     print(f'Time: {endLP - startLP} seconds')
+    print("------------------------------")
+
+    startLPA = time()
+    resLPA = lpa.solution_lp_approx(dataset)
+    endLPA = time()
+
+    print("------------------------------")
+    print("Linear Programming (Approximated):")
+    print("")
+    print(f'Solution: {len(resLPA)}')
+    print(f'Time: {endLPA - startLPA} seconds')
     print("------------------------------")
 
 if __name__ == "__main__":

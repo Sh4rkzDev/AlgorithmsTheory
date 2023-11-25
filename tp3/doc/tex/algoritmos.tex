@@ -1,6 +1,6 @@
 \section{Algoritmos}
 
-A continuación se detallan los códigos y los pasos que se siguieron para llevar a cabo los algoritmos planteados utilizando distintas tecnicas de programacion.
+A continuación se detallan los códigos y los pasos que se siguieron para llevar a cabo los algoritmos planteados utilizando distintas técnicas de programación.
 
 \subsection{Backtracking}
 
@@ -15,11 +15,11 @@ Una vez se obtuvieron todos los subconjuntos de jugadores para cada partido:
 siendo:
 \begin{itemize}
     \item $A$: Lista compuesta de $m$ listas, las cuales representan un conjunto de jugadores para jugar un partido.
-    \item \texttt{jugadores}: Lista con un subconjunto de jugadores que representan una posible solucion actual.
+    \item \texttt{jugadores}: Lista con un subconjunto de jugadores que representan una posible solución actual.
     \item \texttt{soluciones}: Lista con todos los subconjuntos de jugadores que son soluciones.
-    \item \texttt{n}: Numero que indica sobre cual de las $m$ listas estamos trabajando.
-    \item \texttt{utilizados}: Diccionario cuyo par \textit{clave-valor} es \textit{jugador-n} donde $n$ representa la enesima-lista en la que fue utilizado el jugador.\footnote{Siendo $n$ el menor valor encontrado hasta el momento}
-    \item \texttt{minimo}: El minimo es un numero que representa la longitud del subconjunto mas pequeño que se encuentra en soluciones. (Se utiliza dentro de una lista dado que las listas actuan como punteros)
+    \item \texttt{n}: Número que indica sobre cuál de las $m$ listas estamos trabajando.
+    \item \texttt{utilizados}: Diccionario cuyo par \textit{clave-valor} es \textit{jugador-n} donde $n$ representa la enésima-lista en la que fue utilizado el jugador.\footnote{Siendo $n$ el menor valor encontrado hasta el momento}
+    \item \texttt{mínimo}: El minimo es un número que representa la longitud del subconjunto más pequeño que se encuentra en soluciones. (Se utiliza dentro de una lista dado que las listas actúan como punteros)
 \end{itemize}
 
 El algoritmo persigue la exploración de diversas soluciones mediante combinaciones, las cuales se ven restringidas mediante condiciones de poda. Este enfoque se implementa con el propósito de evitar la evaluación exhaustiva de todas las posibles combinaciones evitando que se convierta en un algoritmo de \textit{Fuerza Bruta}, optimizando así la eficiencia del proceso.
@@ -27,51 +27,99 @@ El algoritmo persigue la exploración de diversas soluciones mediante combinacio
 Estas condiciones de poda son:
 \begin{itemize}
 	\item En caso de que la longitud de la solución actual sea igual o mayor que la longitud de la solución óptima encontrada hasta el momento, se concluye que la solución actual no mejorará la situación. La igualdad se justifica porque, al estar en esta línea de código, implica que aún quedan listas por recorrer. En estas listas, podría agregarse un elemento más, lo cual invalidaría la condición de optimalidad. En el caso de no agregarlo, no se habría encontrado una solución mejor.
-	\item En el caso de que un elemento de la solución actual pertenezca al subconjunto bajo análisis, se concluye que no es necesario explorar soluciones adicionales que involucren elementos de dicho subconjunto. dado que nuestro objetivo es usar la menor cantidad de elementos en la solucion final.
-	\item Si un jugador ya fue utilizado en un nivel mas alto del arbol de posibilidades, entonces ya cubrio todas las combinaciones que vengan en niveles inferiores. En consecuencia, si se detecta la presencia de dicho jugador en un nivel menor al que se había identificado previamente, se interrumpe la exploración de nuevas combinaciones con este elemento, dado que su participación ya ha sido exhaustivamente considerada en niveles superiores.
+	\item En el caso de que un elemento de la solución actual pertenezca al subconjunto bajo análisis, se concluye que no es necesario explorar soluciones adicionales que involucren elementos de dicho subconjunto. dado que nuestro objetivo es usar la menor cantidad de elementos en la solución final.
+	\item Si un jugador ya fue utilizado en un nivel más alto del árbol de posibilidades, entonces ya cubrió todas las combinaciones que vengan en niveles inferiores. En consecuencia, si se detecta la presencia de dicho jugador en un nivel menor al que se había identificado previamente, se interrumpe la exploración de nuevas combinaciones con este elemento, dado que su participación ya ha sido exhaustivamente considerada en niveles superiores.
 \end{itemize}
 
-En cuanto a la complejidad del algoritmo, este analiza exhaustivamente todas las combinaciones posibles. No obstante, interrumpe el procesamiento de aquellas combinaciones que no conducen a una solución óptima, lo que, en consonancia con la propia naturaleza del enfoque de backtracking, implica una complejidad de ${O}(2^n)$, dada su relación con la exploración de todas las combinaciones posibles. 
+En cuanto a la complejidad del algoritmo, este analiza exhaustivamente todas las combinaciones posibles. No obstante, interrumpe el procesamiento de aquellas combinaciones que no conducen a una solución óptima, lo que, en consonancia con la propia naturaleza del enfoque de backtracking, implica una complejidad de ${O}(2^n)$, dada su relación con la exploración de todas las combinaciones posibles.
 
-\subsubsection{Obtener la solucion optima de todas las ya encontradas}
+\subsubsection{Obtener la solución óptima de todas las ya encontradas}
 
-Para obtener la solucion optima se implementó el siguiente algoritmo:
+Para obtener la solución óptima se implementó el siguiente algoritmo:
 
 \lstinputlisting[language=Python]{code/optima.py}
 
-El codigo lo unico que hace una vez imvocada a la funcion es buscar la minima solucion en base a la longitud.
+El código lo único que hace una vez invocada a la función es buscar la mínima solución en base a la longitud.
 
 
-\subsection{Programacion Lineal}
+\subsection{Programación Lineal}
 
+\subsubsection{Variables Binarias}
 
+Se detalla a continuacion el codigo y su funcionamiento del algoritmo planteado con \textbf{\textit{Programación Lineal}}:
 
+\lstinputlisting[language=Python]{code/lp.py}
 
+Nuestra solución utilizando Programación Lineal se compone de la siguiente manera:
+\begin{enumerate}
+    \item \texttt{Asignación de las variables}: Debido a que Scaloni nos pide hacer una selección de la mínima cantidad de jugadores que deberían jugar para satisfacer los deseos de los periodistas, decidimos utilizar como variables a todos los jugadores que fueron nombrados por ellos, guardándolos en un set previamente para evitar su repetición, y luego un diccionario cuyas claves son los nombres de los jugadores y sus valores son las variables. Estas variables son binarias (variables de decisión que pueden tomar valores 0 o 1) ya que el objetivo es decidir a quienes de todos ellos poner en la solución. Aquellas variables que tengan un valor de 1, se incluirán en la solución. En caso contrario, no se hará esto. Estas se crean utilizando \textit{LpVariable} de \textit{PuLP}, con su categoría en 'Binary'.
+
+    \item \texttt{Creación del problema de minimización}: Creamos un objeto problem utilizando \textit{LpProblem} de \textit{PuLP}, que se formula como un problema de minimización (\textit{LpMinimize}).
+
+    \item \texttt{Restricciones}: En este paso, planteamos la inecuación lineal que define las restricciones sobre dichas variables:
+   	 Para garantizar que cada subconjunto tenga al menos un jugador seleccionado, iteramos sobre los subconjuntos asegurándonos de que la suma de las variables asociadas a los jugadores en cada conjunto sea al menos 1.
+
+    \item \texttt{Minimización de la función objetivo}: Agregamos la función objetivo al problema para minimizar la suma de las variables de decisión, minimizando el número total de jugadores seleccionados.
+
+    \item \texttt{Solución}: Mediante el método \textit{solve()}, resolvimos el problema lineal y obtuvimos una solución.    Luego, procedimos a extraer la solución creando una lista que contiene los nombres de los jugadores cuyas variables de decisión tienen un valor mayor que 0 en la solución generada.
+    Finalmente, la función retorna la solución, que es la lista de jugadores seleccionados que por lo menos jugarán contra Burkina Faso.
+\end{enumerate}
+
+Con respecto a la complejidad temporal, crear las variables binarias para cada jugador cuesta $\mathcal{O}(N)$, siendo $N$ el número total de jugadores. Sin embargo, resolver el problema lineal es la parte más costosa en cuanto a tiempo de ejecución. Esto depende en cierta parte del método de resolución utilizado por PuLP y del tamaño del modelo. La complejidad temporal en el peor de los casos llega a ser exponencial ya que analiza todos los casos, por lo que la complejidad final será de $\mathcal{O}(2^N)$.
+
+\subsubsection{Variables Reales}
+
+\lstinputlisting[language=Python]{code/lpa.py}
+
+Para utilizar el algoritmo propuesto por Bilardo, reutilizamos el código anterior haciendo algunas modificaciones:
+\begin{itemize}
+	\item En lugar de variables de decisión binarias, donde es un simplemente sí o no para cada jugador, utilizamos variables de decisión continuas, siendo estas un número entre 0 y 1, que representa la probabilidad de seleccionar aquél jugador.
+	\item Luego de resolver el problema y de obtener las probabilidades de selección para cada jugador, procedimos a redondear aquellas probabilidades:
+    	Para decidir a quién seleccionar definitivamente, comparamos las probabilidades redondeadas con un umbral calculado, un número b en función de la cantidad de jugadores que tiene el subconjunto más grande.
+	Si la probabilidad de un jugador es mayor o igual a 1/b, se lo agrega a la solución redondeada.
+\end{itemize}
+
+Con respecto a la complejidad, la complejidad total del algoritmo es de $\mathcal{O}(N+M)$, donde $N$ es la cantidad de conjuntos y $M$ es la cantidad total de jugadores en esos conjuntos.
+
+Algoritmo para calcular el ratio de aproximacion:
+
+\lstinputlisting[language=Python]{code/approx_analisis.py}
+
+En cuanto a la medición de cuán buena es la aproximación, calculamos el ratio de aproximación, siendo este un valor menor o igual a la división de la solución aproximada sobre la solución óptima. Los resultados obtenidos en cada caso fueron los siguientes ($r(A)$: ratio de aproximación):
+\begin{itemize}
+	\item \texttt{N = 7}: $r(A)$ = 1.0
+	\item \texttt{N = 10}: $r(A)$ = 1.0
+	\item \texttt{N = 15}: $r(A)$ = 2.75
+	\item \texttt{N = 15}: $r(A)$ = 2.55
+	\item \texttt{N = 15}: $r(A)$ = 3.0
+\end{itemize}
+
+Como se puede observar, el ratio $r(A)$ vale 1.0 en los primeros casos, lo que expresa que la aproximación es exacta, por lo tanto la cota utilizada está bien calculada. Sin embargo, al aumentar la cantidad de elementos considerablemente, el $r(A)$ aumenta, lo que refleja la magnitud de la diferencia entre el algoritmo aproximado con el óptimo.
 
 \subsection{Algoritmo Greedy}
 
-Para poder ir al codigo, primero recordemos como funciona un algoritmo Greedy. Los algoritmos Greedy siguen una regla sencilla que les permiten obtener un \textit{óptimo local} según el estado actual del programa, y poder llegar a un \textit{óptimo general} combinando los locales. A su vez presentan desventajas, como por ejemplo que no siempre dan el resultado óptimo, o que demostrar que el resultado es óptimo es difícil. Por otro lado, son intuitivos de pensar y fácil de entender, y suelen ser eficientes.
+Para poder ir al código, primero recordemos cómo funciona un algoritmo Greedy. Los algoritmos Greedy siguen una regla sencilla que les permiten obtener un \textit{óptimo local} según el estado actual del programa, y poder llegar a un \textit{óptimo general} combinando los locales. A su vez presentan desventajas, como por ejemplo que no siempre dan el resultado óptimo, o que demostrar que el resultado es óptimo es difícil. Por otro lado, son intuitivos de pensar y fácil de entender, y suelen ser eficientes.
 
-Ahora bien, nuestra regla sencilla se baso en lo siguiente:
+Ahora bien, nuestra regla sencilla se basó en lo siguiente:
 \begin{itemize}
-    \item Para cada uno de los elementos, en nuestro caso jugadores, se iterara el resto de subconjuntos, que en este caso seran los pedidos de los demas medios.
-    \item Se tomara el jugador que mas medios represente y pueda hacernos quedar bien con ellos. Estos medios ya se desestimaran porque ya habra un jugador que ellos desean ver.
-    \item En caso de que la actual iteracion sea de un medio que ya esta considerado ya que uno de sus jugadores fue tomado en cuenta, se continuara sin analizarlo.
+    \item Para cada uno de los elementos, en nuestro caso jugadores, se iterara el resto de subconjuntos, que en este caso serán los pedidos de los demás medios.
+    \item Se tomará el jugador que más medios represente y pueda hacernos quedar bien con ellos. Estos medios ya se desestimaron porque ya habrá un jugador que ellos desean ver.
+    \item En caso de que la actual iteración sea de un medio que ya está considerado ya que uno de sus jugadores fue tomado en cuenta, se continuará sin analizarlo.
 \end{itemize}
 
-Esto hara lo mejor posible teniendo en cuenta la informacion actual del programa ya que siempre buscara el mejor jugador que pueda satisfacer la mayor cantidad de medios posibles.
+Esto hará lo mejor posible teniendo en cuenta la información actual del programa ya que siempre buscará el mejor jugador que pueda satisfacer la mayor cantidad de medios posibles.
 
-El codigo es el siguiente:
+El código es el siguiente:
 
 \lstinputlisting[language=Python]{code/greedy.py}
 
-El codigo funciona de la siguiente manera:
+El código funciona de la siguiente manera:
 \begin{itemize}
-    \item \texttt{b}: set de subconjuntos que recibimos. Cada subconjunto representaria los pedidos de los medios.
-    \item \texttt{res}: set de resultado, aqui se aniadiran todos los jugadores que deben meterse si o si en el plantel si Scaloni no quiere problemas con ningun medio.
-    \item \texttt{considered}: set de medios que se van considerando a medido que aniadimos jugadores a nuestro set de resultado.
-    \item Para cada $subset$ se itera sus elementos, que aqui seran los pedidos de los medios y los jugadores que desean ver. Para cada jugador del medio que se esta iterando, se iteran los que quedan por ver, y nos guardaremos los medios que abarcara cada jugador para luego desestimarlos ya que estaran siendo considerados al elegir al jugador que mas abarque medios.
-    \item cuando se termina de iterar dicho medio, se agrega todos los medios del jugador que mas abarca al set de medios considerados, asi ahora en adelante esos no se tienen en cuenta para calcular la eficiencia de un jugador al determinar que tanto nos aportara si lo metemos o no.
+    \item \texttt{b}: set de subconjuntos que recibimos. Cada subconjunto representa los pedidos de los medios.
+    \item \texttt{res}: set de resultado, aquí se añadirán todos los jugadores que deben meterse si o si en el plantel si Scaloni no quiere problemas con ningún medio.
+    \item \texttt{considered}: set de medios que se van considerando a medida que añadimos jugadores a nuestro set de resultado.
+    \item Para cada $subset$ se itera sus elementos, que aqui seran los pedidos de los medios y los jugadores que desean ver. Para cada jugador del medio que se está iterando, se iteran los que quedan por ver, y nos guardaremos los medios que abarcara cada jugador para luego desestimarlos ya que están siendo considerados al elegir al jugador que más abarque medios.
+    \item cuando se termina de iterar dicho medio, se agrega todos los medios del jugador que más abarca al set de medios considerados, así ahora en adelante esos no se tienen en cuenta para calcular la eficiencia de un jugador al determinar que tanto nos aportará si lo metemos o no.
 \end{itemize}
 
 La complejidad de dicho algoritmo es $\mathcal{O}\left(n^2 \times m^2\right)$ siendo $n$ la cantidad de subsets (pedidos de los medios) y $m$ la cantidad de elementos (jugadores) ya que por cada subset se itera cada elemento, y por cada elemento se itera $n-1$ subsets y por cada uno de esos subsets todos sus elementos.

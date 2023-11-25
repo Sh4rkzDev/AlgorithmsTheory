@@ -30,8 +30,9 @@ def solution_lp(listas = None):
     if listas is None:
         listas = input.ReadInputs()
     sets_dict = {f'S{i + 1}': set(inner_list) for i, inner_list in enumerate(listas)}
-    hs = hitting_set_lp(sets_dict)
-    return hs
+    return hitting_set_lp(sets_dict)
 
 if __name__ == "__main__":
-    solution_lp()
+    res = solution_lp()
+    print("Size of solution: ", len(res))
+    print(res)
