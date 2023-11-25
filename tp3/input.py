@@ -1,19 +1,15 @@
 import sys
 
-def ReadInputs():
+def ReadInputs(path = None):
     """
-    It process the file passed as parameter in the Command Line, and return a list of the earnings of the workout through the days
-    and a list of the energy consumed day by day.
+    It process the file passed as parameter in the Command Line, and return a list of tuples representing the requests of each media
     """
     args = sys.argv
-    if len(args) != 2:
+    if len(args) != 2 and path is None:
         raise RuntimeError("You should provide a data set")
-    earnings = []
-    energy = []
-    with open(args[1]) as f:
-        n = int(f.readline())
-        for _ in range(n):
-            earnings.append(int(f.readline()))
-        for _ in range(n):
-            energy.append(int(f.readline()))
-    return earnings, energy
+    requests = []
+    if path is None: path = args[1]
+    with open(path) as f:
+        for line in f:
+            requests.append(tuple(line.rstrip("\n").split(",")))
+    return requests

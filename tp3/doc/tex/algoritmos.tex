@@ -1,49 +1,77 @@
-\section{Algoritmo para encontrar la mayor ganancia en los entrenamientos}
+\section{Algoritmos}
 
-A continuación se detallan el código y los pasos que se siguieron para llevar a cabo el algoritmo planteado utilizando \textit{Programación Dinámica}.
+A continuación se detallan los códigos y los pasos que se siguieron para llevar a cabo los algoritmos planteados utilizando distintas tecnicas de programacion.
 
-\subsection{Obtener el cronograma}
+\subsection{Backtracking}
 
-Una vez que se obtuvieron los datos para los entrenamientos y la energía disponible dependiendo la cantidad de días seguidos de haber entrenado, se arma una matriz de tamaño $n \times n$ siendo $n$ la cantidad de días en el cronograma:
+A continuación se detallan el código y los pasos que se siguieron para llevar a cabo el algoritmo planteado utilizando \textbf{\textit{Backtracking}}.
 
-\lstinputlisting[language=Python]{code/workout.py}
+\subsubsection{Obtener las posibles soluciones}
+
+Una vez se obtuvieron todos los subconjuntos de jugadores para cada partido:
+
+\lstinputlisting[language=Python]{code/backtracking.py}
 
 siendo:
 \begin{itemize}
-    \item $e$: valor de la ganancia del entrenamiento.
-    \item $idx$: fila actual que se esta iterando. En nuestra matriz, las filas son los entrenamientos.
-    \item $i$: columna actual que se esta considerando. En nuestra matriz, las columnas son las energias disponibles para los dias segun los dias seguidos se haya entrenado.
+    \item $A$: Lista compuesta de $m$ listas, las cuales representan un conjunto de jugadores para jugar un partido.
+    \item \texttt{jugadores}: Lista con un subconjunto de jugadores que representan una posible solucion actual.
+    \item \texttt{soluciones}: Lista con todos los subconjuntos de jugadores que son soluciones.
+    \item \texttt{n}: Numero que indica sobre cual de las $m$ listas estamos trabajando.
+    \item \texttt{utilizados}: Diccionario cuyo par \textit{clave-valor} es \textit{jugador-n} donde $n$ representa la enesima-lista en la que fue utilizado el jugador.\footnote{Siendo $n$ el menor valor encontrado hasta el momento}
+    \item \texttt{minimo}: El minimo es un numero que representa la longitud del subconjunto mas pequeño que se encuentra en soluciones. (Se utiliza dentro de una lista dado que las listas actuan como punteros)
 \end{itemize}
 
-El algoritmo se basa en crear una matriz de $(n \times n)$ siendo $n$ la cantidad de días. ¿Porque una matriz y no un simple arreglo? En este problema, tenemos que considerar no solo una variable a la hora de buscar los óptimos sino dos. Una será la ganancia del entrenamiento, y la otra la cantidad de energía que tendremos ese día dependiendo si es el primer dia que entrenamos desde el último descanso, o el segundo, etc. Entonces la forma que planteamos es usar la energía para cada dia como filas, y la ganancia de cada entrenamiento como la columna.
+El algoritmo persigue la exploración de diversas soluciones mediante combinaciones, las cuales se ven restringidas mediante condiciones de poda. Este enfoque se implementa con el propósito de evitar la evaluación exhaustiva de todas las posibles combinaciones evitando que se convierta en un algoritmo de \textit{Fuerza Bruta}, optimizando así la eficiencia del proceso.
 
-A la hora de calcular los óptimos para cada dia, se seguirá el siguiente algoritmo:
+Estas condiciones de poda son:
 \begin{itemize}
-	\item Si el dia $e_i$ es el primero que se entrena desde un descanso ($s_1$), hay que obtener el óptimo del dia $e_{i-2}$ ya que el anterior se supone que se descanso.\footnote{Esto solo es valido para los entrenamientos pasados el segundo dia.}
-	\item Si el dia $e_i$ es el segundo que se entrena desde un descanso (fila dos), habrá que sumar a la ganancia del dia $e_{i-1}$ la del dia actual teniendo en cuenta la energía que se redujo respecto el primer dia, pues recordemos
-	\[ s_1 \geq s_2 \geq ... \geq s_n\]
-	\item Para el dia $e_i$ la cantidad máxima de posibles entrenamientos es $i$, ya que siempre el óptimo es respecto a los días descansados como la ganancia de ese entrenamiento, y estos son proporcionales a la cantidad de días, lo que nos resulta en una matriz cuadrada.
+	\item En caso de que la longitud de la solución actual sea igual o mayor que la longitud de la solución óptima encontrada hasta el momento, se concluye que la solución actual no mejorará la situación. La igualdad se justifica porque, al estar en esta línea de código, implica que aún quedan listas por recorrer. En estas listas, podría agregarse un elemento más, lo cual invalidaría la condición de optimalidad. En el caso de no agregarlo, no se habría encontrado una solución mejor.
+	\item En el caso de que un elemento de la solución actual pertenezca al subconjunto bajo análisis, se concluye que no es necesario explorar soluciones adicionales que involucren elementos de dicho subconjunto. dado que nuestro objetivo es usar la menor cantidad de elementos en la solucion final.
+	\item Si un jugador ya fue utilizado en un nivel mas alto del arbol de posibilidades, entonces ya cubrio todas las combinaciones que vengan en niveles inferiores. En consecuencia, si se detecta la presencia de dicho jugador en un nivel menor al que se había identificado previamente, se interrumpe la exploración de nuevas combinaciones con este elemento, dado que su participación ya ha sido exhaustivamente considerada en niveles superiores.
 \end{itemize}
 
-A su vez, esta forma de resolver el problema nos resultara en una matriz triangular, ya que la cantidad máxima de filas es la cantidad de días y lo mismo con los entrenamientos, pero el entrenamiento del dia $e_i$ completará hasta maximo $i$ filas, dejando el resto de las filas hasta $n$ en 0.
+En cuanto a la complejidad del algoritmo, este analiza exhaustivamente todas las combinaciones posibles. No obstante, interrumpe el procesamiento de aquellas combinaciones que no conducen a una solución óptima, lo que, en consonancia con la propia naturaleza del enfoque de backtracking, implica una complejidad de ${O}(2^n)$, dada su relación con la exploración de todas las combinaciones posibles. 
 
-Respecto a la complejidad del algoritmo, todas las operaciones que se hacen son constantes, pues acceder a una posición específica de un arreglo, hacer comparaciones, y asignar valores son $\mathcal{O}(1)$. Pero al mismo tiempo, cada una de estas operaciones se realizan $i$ veces para el entrenamiento $e_i$. Y para cada entrenamiento, se realiza $i$ veces para la energía de cada posible situación de los días seguidos entrenando, pues por cada entrenamiento $e_i$ tengo que considerar la ganancia para la energia $s_1, s_2, ..., s_i$, formando así la matriz triangular. Considerando todo esto, la complejidad final del algoritmo es $\mathcal{O}(n \times n) = \mathcal{O}(n^2)$.
+\subsubsection{Obtener la solucion optima de todas las ya encontradas}
 
-\subsection{Reconstruir cronograma}
+Para obtener la solucion optima se implementó el siguiente algoritmo:
 
-Para reconstruir el cronograma se implementó el siguiente algoritmo:
+\lstinputlisting[language=Python]{code/optima.py}
 
-\lstinputlisting[language=Python]{code/schedule.py}
+El codigo lo unico que hace una vez imvocada a la funcion es buscar la minima solucion en base a la longitud.
 
-Para reconstruir la solución se siguió el siguiente razonamiento:
 
-\begin{enumerate}
-	\item Se iterará de adelante para atrás, de manera de saber si se entreno el dia $e_{i-1}$ o no dependiendo del óptimo del dia $e_i$
-	\item Se buscará en que dia consecutivo se ejercitó el último entrenamiento ($e_i$). Recordemos que para esto, habrá que iterar la última columna de la matriz de arriba hacia abajo, hasta que el elemento en la posición $s_i$ difiera del elemento $s_{i-1}$ (dentro de la misma columna).
-	\item Empezaremos a bajar de forma "escalonada", es decir, bajando una posición y yendo para la izquierda en otra.
-	\item Si llegamos a la fila 0, significa que ese día es el primero luego de haber descansado, así que el anterior día no se entrenó y el último entrenamiento fue el anterior a este último. Volvemos al paso 2.
-	\item En caso de haber llegado a la primer columna, terminará la reconstrucción.
-\end{enumerate}
+\subsection{Programacion Lineal}
 
 
 
+
+
+\subsection{Algoritmo Greedy}
+
+Para poder ir al codigo, primero recordemos como funciona un algoritmo Greedy. Los algoritmos Greedy siguen una regla sencilla que les permiten obtener un \textit{óptimo local} según el estado actual del programa, y poder llegar a un \textit{óptimo general} combinando los locales. A su vez presentan desventajas, como por ejemplo que no siempre dan el resultado óptimo, o que demostrar que el resultado es óptimo es difícil. Por otro lado, son intuitivos de pensar y fácil de entender, y suelen ser eficientes.
+
+Ahora bien, nuestra regla sencilla se baso en lo siguiente:
+\begin{itemize}
+    \item Para cada uno de los elementos, en nuestro caso jugadores, se iterara el resto de subconjuntos, que en este caso seran los pedidos de los demas medios.
+    \item Se tomara el jugador que mas medios represente y pueda hacernos quedar bien con ellos. Estos medios ya se desestimaran porque ya habra un jugador que ellos desean ver.
+    \item En caso de que la actual iteracion sea de un medio que ya esta considerado ya que uno de sus jugadores fue tomado en cuenta, se continuara sin analizarlo.
+\end{itemize}
+
+Esto hara lo mejor posible teniendo en cuenta la informacion actual del programa ya que siempre buscara el mejor jugador que pueda satisfacer la mayor cantidad de medios posibles.
+
+El codigo es el siguiente:
+
+\lstinputlisting[language=Python]{code/greedy.py}
+
+El codigo funciona de la siguiente manera:
+\begin{itemize}
+    \item \texttt{b}: set de subconjuntos que recibimos. Cada subconjunto representaria los pedidos de los medios.
+    \item \texttt{res}: set de resultado, aqui se aniadiran todos los jugadores que deben meterse si o si en el plantel si Scaloni no quiere problemas con ningun medio.
+    \item \texttt{considered}: set de medios que se van considerando a medido que aniadimos jugadores a nuestro set de resultado.
+    \item Para cada $subset$ se itera sus elementos, que aqui seran los pedidos de los medios y los jugadores que desean ver. Para cada jugador del medio que se esta iterando, se iteran los que quedan por ver, y nos guardaremos los medios que abarcara cada jugador para luego desestimarlos ya que estaran siendo considerados al elegir al jugador que mas abarque medios.
+    \item cuando se termina de iterar dicho medio, se agrega todos los medios del jugador que mas abarca al set de medios considerados, asi ahora en adelante esos no se tienen en cuenta para calcular la eficiencia de un jugador al determinar que tanto nos aportara si lo metemos o no.
+\end{itemize}
+
+La complejidad de dicho algoritmo es $\mathcal{O}\left(n^2 \times m^2\right)$ siendo $n$ la cantidad de subsets (pedidos de los medios) y $m$ la cantidad de elementos (jugadores) ya que por cada subset se itera cada elemento, y por cada elemento se itera $n-1$ subsets y por cada uno de esos subsets todos sus elementos.

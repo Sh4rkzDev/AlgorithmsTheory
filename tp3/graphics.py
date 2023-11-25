@@ -1,49 +1,32 @@
 import matplotlib.pyplot as plt
-from random import randint
 from time import time
-import workout
+import bt
+import greedy
+import input
 
-NUMTESTS = 10
-MINTESTS = 2000
-MAXTESTS = MINTESTS * NUMTESTS
-MIN = 1
-MAX = 100
-AX = [i for i in range(MINTESTS, MAXTESTS+1, MINTESTS)]
-
-def cuad(n):
-    return 0.0000002 * n**2
+AX = [5, 7, 10, 15, 20, 50, 75, 100, 200]
 
 def getGraph():
-    tests = []
-    for i in range(1, NUMTESTS+1):
-        earnings, energies = [], []
-        quant = MINTESTS * i
-        energy = 100
-        onePerc = quant // 100
-        for j in range(quant):
-            earnings.append((randint(MIN, MAX)))
-            energies.append(energy)
-            if j // onePerc == 0: energy -= 1
-        aux = (earnings, energies)
-        tests.append(aux)
+    tests = ["5.txt", "7.txt", "10_varios.txt", "15.txt", "20.txt", "50.txt", "75.txt", "100.txt", "200.txt"]
+    timesBT = []
+    timesGreedy = []
+    for path in tests:
+        dataset = input.ReadInputs("tests/" + path)
 
-    times = []
-    numberTest = 1
-    for earn, energy in tests:
-        start = time()
-        workout.getWorkOut(earn, energy)
-        end = time()
-        dt = end - start
-        print("Finished test ", numberTest)
-        numberTest += 1
-        times.append(dt)
+        startGreedy = time()
+        greedy.hittingSetGreedy(dataset)
+        endGreedy = time()
+        timesGreedy.append(endGreedy - startGreedy)
 
-    complexity = [cuad(n) for n in AX]
+        startBT = time()
+        bt.solucionOptima(dataset)
+        endBT = time()
+        timesBT.append(endBT - startBT)
 
     fig, ax = plt.subplots()
-    ax.plot(AX, times, label= 'Dynamic Programming')
-    ax.plot(AX, complexity, label= 'O(n x n)')
-    ax.set(xlabel='quantity of workouts [n]', ylabel='time [s]', title='Complexity of the algorithm')
+    ax.plot(AX, timesBT, label= 'Backtracking Algorithm')
+    ax.plot(AX, complexity, label= 'Greedy Algorithm')
+    ax.set(xlabel='quantity of requests [n]', ylabel='time [s]', title='Complexity of algorithms')
     ax.grid()
     
     plt.legend()

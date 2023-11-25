@@ -1,14 +1,13 @@
 from pulp import LpProblem, LpMinimize, LpVariable, lpSum
-def list_creation(ruta):
-    file = open(ruta)
+
+def list_creation(path):
     l = []
-    
-    s = file.readline().rstrip("\n")
-    while s!="":
-        lista = s.split(",")
-        l.append(lista)
+    with open(path) as file:
         s = file.readline().rstrip("\n")
-    file.close()
+        while s!="":
+            lista = s.split(",")
+            l.append(lista)
+            s = file.readline().rstrip("\n")
     return l
 
 def hitting_set_lp(sets):
@@ -22,7 +21,7 @@ def hitting_set_lp(sets):
     # 3) Constraints: each subset must have at least one player
     for _, subset_players in sets.items():
         problem += lpSum(players_vars[player] for player in subset_players) >= 1
-    
+
     # 4) We minimize the total number of selected elements
     problem += lpSum(players_vars.values())
 
@@ -35,14 +34,11 @@ def hitting_set_lp(sets):
             solution.append(f"{player}")
 
     return solution
-     
 
-def solution_lp(ruta):
-    listas = list_creation(ruta)
+def solution_lp(path):
+    listas = list_creation(path)
     sets_dict = {f'S{i + 1}': set(inner_list) for i, inner_list in enumerate(listas)}
     hs = hitting_set_lp(sets_dict)
     return hs
 
 solution_lp("nombre de la ruta")
-
-
