@@ -25,7 +25,7 @@ def getGraph():
 
     fig, ax = plt.subplots()
     ax.plot(AX, timesBT, label= 'Backtracking Algorithm')
-    ax.plot(AX, complexity, label= 'Greedy Algorithm')
+    ax.plot(AX, timesGreedy, label= 'Greedy Algorithm')
     ax.set(xlabel='quantity of requests [n]', ylabel='time [s]', title='Complexity of algorithms')
     ax.grid()
     
