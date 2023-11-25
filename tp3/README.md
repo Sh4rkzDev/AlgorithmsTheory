@@ -26,7 +26,7 @@ Para ver la diferencia y el ratio de aproximacion entre estos dos, correr:
 ```
 $ python3 approx_analisis.py
 ```
-Para correr el algoritmo con tecnica **Greegy**, correr:
+Para correr el algoritmo con tecnica **Greedy**, correr:
 ```
 $python3 greedy.py <archivo>
 ```
