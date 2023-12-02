@@ -6,7 +6,7 @@ Como no podía ser de otra manera, el gran Bilardo, astuto pues ya se conoce tod
 En nuestro caso, $A$ son los jugadores convocados, los $B_i$ son los deseos de la prensa, y $C$ es el conjunto de jugadores que deberían jugar si o si en la selección.
 Scaloni solicita nuestra ayuda para ver si este subconjunto de jugadores se puede obtener eficientemente, es decir, en tiempo polinomial, o se nos complica obtener dicho subconjunto más de lo que se pretende.
 
-Ahora bien, ¿Qué significa eso de \textit{"tiempo polinomial"}? ¿Existe algo peor? ¿A dónde puede llegar todo esto? Vamos de a poco.
+Ahora bien, ¿Qué significa eso de \textit{''tiempo polinomial''}? ¿Existe algo peor? ¿A dónde puede llegar todo esto? Vamos de a poco.
 En el mundo de la teoría de la complejidad computacional existe lo que se conoce como \textit{Clases de Complejidad}. Segun \href{https://es.wikipedia.org/wiki/Clase_de_complejidad}{Wikipedia}, la definicion es la siguiente:
 \begin{quote}
 En teoría de la complejidad computacional, una clase de complejidad es un conjunto de problemas de decisión de complejidad relacionada. Una clase de complejidad tiene una definición de la forma:
@@ -16,19 +16,19 @@ En teoría de la complejidad computacional, una clase de complejidad es un conju
 
 Existen diversas clases de complejidad, y aquí se enumeran algunas de ellas:
 \begin{itemize}
-    \item \texttt{P}: problemas que se resuelven en tiempo polinomial, es decir, son bastantes eficientes.
-    \item \texttt{NP}: problemas que sus soluciones se pueden verificar en tiempo polinomial. Con esto podemos afirmar que todo problema que está en P, también está en NP, ya que si encontramos la solución en tiempo polinomial, también la podremos validar en tiempo polinomial\footnote{Aclarar que no vale su inversa, ya que no todo problema de $NP$ se encuentra en $P$, por lo que $NP \not\subset  P$.}.
-	\[ P \subset NP\]
-    \item \texttt{NP-Completos}: problemas de decisión los cuales la respuesta pueden ser "si" o "no" dependiendo si se puede resolver el problema. Estos problemas son los más difíciles de los problemas que se pueden verificar su solución en tiempo polinomial, es decir, los más difíciles de los NP.
-	Por lo tanto,
-	\[ P \subset NP \subset NP-Completos\]
-    \item \texttt{PSPACE}: problemas que para encontrar su solución se requiere un espacio polinomial de memoria.
+	\item \texttt{P}: problemas que se resuelven en tiempo polinomial, es decir, son bastantes eficientes.
+	\item \texttt{NP}: problemas que sus soluciones se pueden verificar en tiempo polinomial. Con esto podemos afirmar que todo problema que está en P, también está en NP, ya que si encontramos la solución en tiempo polinomial, también la podremos validar en tiempo polinomial\footnote{Aclarar que no vale su inversa, ya que no todo problema de $NP$ se encuentra en $P$, por lo que $NP \not\subset  P$.}.
+    \[ P \subset NP\]
+	\item \texttt{NP-Completos}: problemas de decisión los cuales la respuesta pueden ser ''si'' o ''no'' dependiendo si se puede resolver el problema. Estos problemas son los más difíciles de los problemas que se pueden verificar su solución en tiempo polinomial, es decir, los más difíciles de los NP.
+    Por lo tanto,
+    \[ P \subset NP \subset NP-Completos\]
+	\item \texttt{PSPACE}: problemas que para encontrar su solución se requiere un espacio polinomial de memoria.
 \end{itemize}
 Ahora bien, si hablamos de clases de complejidad y problemas NP-Completos, también debemos hablar de $Reducciones$. Según \href{https://es.wikipedia.org/wiki/Reducci%C3%B3n_(complejidad)}{Wikipedia}:
 \begin{quote}
-	En teoría de la computación y teoría de la complejidad computacional, una reducción es una transformación de un problema a otro problema. Dependiendo de la transformación usada, la reducción se puede utilizar para definir clases de complejidad en un conjunto de problemas.
+    En teoría de la computación y teoría de la complejidad computacional, una reducción es una transformación de un problema a otro problema. Dependiendo de la transformación usada, la reducción se puede utilizar para definir clases de complejidad en un conjunto de problemas.
 
-	Intuitivamente, un problema $A$ es reducible a un problema $B$ si las soluciones de $B$ existen y dan una solución para $A$ siempre que $A$ tenga solución. Así, resolver $A$ no puede ser más difícil que resolver $B$. Normalmente, esto se expresa de la forma $A \leq B$, y se añade un subíndice en $\le$ para indicar el tipo de reducción utilizada. Por ejemplo, se usa la letra $p$ como subíndice para indicar que la reducción puede realizarse en tiempo polinomial: $A \leq _p B$
+    Intuitivamente, un problema $A$ es reducible a un problema $B$ si las soluciones de $B$ existen y dan una solución para $A$ siempre que $A$ tenga solución. Así, resolver $A$ no puede ser más difícil que resolver $B$. Normalmente, esto se expresa de la forma $A \leq B$, y se añade un subíndice en $\le$ para indicar el tipo de reducción utilizada. Por ejemplo, se usa la letra $p$ como subíndice para indicar que la reducción puede realizarse en tiempo polinomial: $A \leq _p B$
 \end{quote}
 
 En otras palabras, si reducimos un problema $A$ a un problema $B$, resolver el problema $A$ será como mucho tan difícil de resolver como el problema $B$. Esto va a ser de gran utilidad, ya que se ha demostrado distintos problemas que son \texttt{NP-Completos}, y muchas veces para poder demostrar esto se ha utilizado y se puede utilizar la propiedad de transitividad, que es que si tengo un problema $A$ tal que $A \in \texttt{NP-Completos}$, y un problema $B$ que desconozco su dificultad pero pertenece a $NP$, en caso que logre reducir $A$ a $B$, $B$ también es \texttt{NP-Completos}. Es decir
@@ -44,11 +44,11 @@ Supongamos que tenemos el conjunto $A = (1, 2, 3, 4, 5, 6, 7, 8, 9, 10)$, y los 
 \begin{lstlisting}[language=Python]
 if len(C) > len(B): return false
 for subconjunto in B:
-	hay_un_elemento = false
-	for elemento in subconjunto:
-    	if elemento in C:
-        	hay_un_elemento = true
-	if not hay_un_elemento: return false
+    hay_un_elemento = false
+    for elemento in subconjunto:
+   	 if elemento in C:
+   		 hay_un_elemento = true
+    if not hay_un_elemento: return false
 return true
 \end{lstlisting}
 
@@ -59,16 +59,16 @@ Siguiendo con el ejemplo, la verificación devolverá false ya que no hay ningú
 Continuando con el problema del Hitting-Set, ¿Es posible que $Hitting-Set \in \texttt{NP-Completo}$?
 Para que se cumpla eso, podemos aprovecharnos de la propiedad de transitividad y reducir polinomialmente un problema que sabemos que es \texttt{NP-Completo} a Hitting-Set. Ahora bien, tenemos que encontrar un problema el cual nos pueda facilitar esta transformación (siempre y cuando exista la posibilidad de que Hitting-Set sea NP-Completo).
 
-Para ello, usaremos el problema del SAT (prueba que es \href{https://www.geeksforgeeks.org/proof-that-sat-is-np-complete/}{\texttt{NP-Completo}}). SAT es un problema el cual propone que dadas cláusulas con variables booleanas, determinar si el problema se puede satisfacer o no probando las distintas combinaciones que puedan llegar a satisfacer todas las cláusulas. Cada cláusula está compuesta por $m$ variables, las cuales son booleanas y conectadas por un $\lor$ el cual hace que solo sea necesaria una variable de todas para satisfacer dicha cláusula. Ahora está la pregunta, ¿Cómo podemos hacer para transformar las cláusulas y sus variables de tal manera que haciendo uso del Hitting-Set, devuelva si existe o no una solución al problema del SAT de tamaño como mucho $k$?
+Para ello, usaremos el problema del Dominating-Set (prueba que es \href{https://www.geeksforgeeks.org/proof-that-dominant-set-of-a-graph-is-np-complete/}{\texttt{NP-Completo}}). Dominating-Set es un problema el cual propone que dado un grafo G, encontrar el subconjunto $D$ de vértices de G tal que: $\forall v \in G: v \in D \lor w \in D$, siendo $w$ un adyacente a $v$, y este subconjunto el más chico posible. Ahora está la pregunta, ¿Cómo podemos hacer para transformar el grafo y el problema de Dominating-Set de tal manera que haciendo uso del Hitting-Set, devuelva si existe o no una solución al problema del Dominating-Set de tamaño como mucho $k$?
 
-En el Hitting-Set, lo que nos condiciona es que para cada conjunto, haya al menos un representante, y buscar el conjunto solución tal que sea mínimo. Por el otro lado, en el SAT lo que nos condiciona es que si o si se tienen que cumplir todas las cláusulas siendo alguna de sus variables \textit{verdadera}, y en caso que no exista asignación posible, no habrá solución al problema. Empecemos por lo básico: transformar las cláusulas.
+En el Hitting-Set, lo que nos condiciona es que para cada subconjunto, haya al menos un representante, y buscar el conjunto solución tal que sea mínimo. Por el otro lado, en el Dominating-Set lo que nos condiciona es el hecho de que si o si dado un vértice $v$ y sus adyacentes, al menos uno de dichos vértices deben estar en el subconjunto $D$. Esto ya nos va indicando cómo podemos hacer posible la reducción, dado que podemos empezar a ver cómo se pueden formar nuestros $B_i$ del Hitting-Set. Empecemos por lo básico: transformar el grafo.
 
-Ya que con lo que debemos cumplir son los subconjuntos $B_i$, que haya al menos un elemento de cada uno, sería acorde que las variables de cada cláusula sean los elementos de todo el conjunto $A$. Falta lo importante y la parte clave: cómo relacionar estas variables de manera que al pasar la transformación de nuestras cláusulas a nuestra "caja negra" que resuelve un Hitting-Set, nos devuelva que puede existir solución de como mucho $k$ elementos, siendo $k$ la cantidad de cláusulas. La relacion sera de la siguiente manera:
+Ya que con lo que debemos cumplir son los subconjuntos $B_i$ que haya al menos un elemento de cada uno, sería acorde que los vértices del grafo sean los elementos de todo el conjunto $A$. Falta lo importante y la parte clave: cómo relacionar estos vértices de manera que al pasar la transformación de nuestro grafo a nuestra ''caja negra'' que resuelve un Hitting-Set, nos devuelva que puede existir solución de como mucho $k$ elementos, siendo $k$ la cantidad de vértices del grafo original. La relacion sera de la siguiente manera:
 \begin{itemize}
-	\item Para cada cláusula, se creará un subconjunto $B_i$ el cual contendrá las variables de dicha cláusula, es decir, las variables pasarán a ser los elementos de cada subconjunto.
-	\item En caso que otra cláusula contenga una misma variable de otra cláusula, se usará el mismo elemento y no uno duplicado o diferente.
+    \item Para cada vertice $v_i$, se creará un subconjunto $B_i$ el cual contendrá a $v_i$ y todos sus adyacentes, es decir, $\forall v_i \in G: \forall w_i \in adyacentes(v_i): v_i \in B_i \land w_i \in B_i$.
+    \item Habrá tantos subconjuntos $B_i$ como vértices en el grafo, y el tamaño de estos subconjuntos será la cantidad de adyacentes que tenga el vértice a partir del cual se genero el subconjunto.
 \end{itemize}
 
-De esta manera, una vez creados todos los subconjuntos $B$, al pasar a la "caja negra" que resuelve el Hitting-Set nuestro conjunto y un valor $k$, nos devolverá si existe o no una solución la cual contenga como mucho $k$ elementos, que "interpretado" a nuestro problema original del SAT, que existan como mucho $k$ variables con valor booleana \textit{true}.
+De esta manera, una vez creados todos los subconjuntos $B_i$, al pasar a la ''caja negra'' que resuelve el Hitting-Set nuestro conjunto y un valor $k$, nos devolverá si existe o no una solución la cual contenga como mucho $k$ elementos, que ''interpretado'' a nuestro problema original del Dominating-Set, que existan como mucho $k$ vértices pertenecientes al conjunto $D$. Una vez obtenida la salida de nuestra ''caja negra'' que diga si existe o no una solución al problema, podría hacerse un estilo de \textit{Búsqueda Binaria} para encontrar el conjunto mínimo del Dominating-Set.
 
-Al ser SAT un problema \texttt{NP-Completo}, por propiedad de la transitividad, queda demostrado que el $Hitting-Set \subset \texttt{NP-Completo}$.
+Al ser Dominating-Set un problema \texttt{NP-Completo}, por propiedad de la transitividad, queda demostrado que el $Hitting-Set \subset \texttt{NP-Completo}$.
