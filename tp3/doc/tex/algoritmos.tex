@@ -16,10 +16,9 @@ siendo:
 \begin{itemize}
     \item $A$: Lista compuesta de $m$ listas, las cuales representan un conjunto de jugadores para jugar un partido.
     \item \texttt{jugadores}: Lista con un subconjunto de jugadores que representan una posible solución actual.
-    \item \texttt{soluciones}: Lista con todos los subconjuntos de jugadores que son soluciones.
+    \item \texttt{solucion}: Lista con todos los subconjuntos de jugadores que son soluciones.
     \item \texttt{n}: Número que indica sobre cuál de las $m$ listas estamos trabajando.
     \item \texttt{utilizados}: Diccionario cuyo par \textit{clave-valor} es \textit{jugador-n} donde $n$ representa la enésima-lista en la que fue utilizado el jugador.\footnote{Siendo $n$ el menor valor encontrado hasta el momento}
-    \item \texttt{mínimo}: El minimo es un número que representa la longitud del subconjunto más pequeño que se encuentra en soluciones. (Se utiliza dentro de una lista dado que las listas actúan como punteros)
 \end{itemize}
 
 El algoritmo persigue la exploración de diversas soluciones mediante combinaciones, las cuales se ven restringidas mediante condiciones de poda. Este enfoque se implementa con el propósito de evitar la evaluación exhaustiva de todas las posibles combinaciones evitando que se convierta en un algoritmo de \textit{Fuerza Bruta}, optimizando así la eficiencia del proceso.
@@ -33,18 +32,18 @@ Estas condiciones de poda son:
 
 En cuanto a la complejidad del algoritmo, este analiza exhaustivamente todas las combinaciones posibles. No obstante, interrumpe el procesamiento de aquellas combinaciones que no conducen a una solución óptima, lo que, en consonancia con la propia naturaleza del enfoque de backtracking, implica una complejidad de ${O}(2^n)$, dada su relación con la exploración de todas las combinaciones posibles.
 
-\subsubsection{Obtener la solución óptima de todas las ya encontradas}
-
-Para obtener la solución óptima se implementó el siguiente algoritmo:
-
-\lstinputlisting[language=Python]{code/optima.py}
-
-El código lo único que hace una vez invocada a la función es buscar la mínima solución en base a la longitud.
-
-
 \subsection{Programación Lineal}
 
 \subsubsection{Variables Binarias}
+
+Con el objetivo de resolver el problema de encontrar el conjunto más pequeño de jugadores que intersectan con los subconjuntos que representan los deseos de cada periodista, definimos en primer lugar las condiciones necesarias para plantear un algoritmo utilizando \textit{Programacion Lineal}:
+
+\begin{enumerate}
+    \item Para encarar un problema de este tipo, comenzamos definiendo a cada jugador como una variable binaria, ya que se trata de un problema en el que tenemos que tomar una decisión con cada jugador: si formará parte o no del conjunto que jugará contra Burkina Faso. Por lo tanto, cada uno de ellos tendrá un valor que puede ser 1 (si forma parte de la solución) o 0 (si no forma parte). Para esto, se deberá cumplir con lo siguiente: $X_{player} \in {0, 1}$.
+    \item Luego, ideamos una inecuación que representa una restricción impuesta para cada subconjunto: que al menos un jugador de este esté incluído en la solución final, para que la consigna se cumpla. Por esta razón, la suma de las variables binarias que corresponden a los jugadores de un subconjunto debe ser mayor o igual a 1, lo que se traduce en que, de manera obligatoria, uno o varios jugadores deben formar parte de la respuesta, ya que si por lo menos uno está incluído, ese jugador tiene un valor 1 y el resto 0, y en consecuencia, la suma total daría 1; sin embargo, existen posibilidades de que más de uno forme parte, por lo tanto la suma puede dar mayor a 1 también.
+    \[ \forall subset: \sum\limits_{player} X_{player} \geq 1 \]
+    \item Por último, como la función objetivo es minimizar lo máximo posible la cantidad de jugadores seleccionados, la suma de todas las variables de decisión deben ser minimizadas: $min \sum X_{player}$
+\end{enumerate}
 
 Se detalla a continuacion el codigo y su funcionamiento del algoritmo planteado con \textbf{\textit{Programación Lineal}}:
 
@@ -69,32 +68,78 @@ Con respecto a la complejidad temporal, crear las variables binarias para cada j
 
 \subsubsection{Variables Reales}
 
+Para obtener la solución al problema utilizando el algoritmo propuesto por el doctor Bilardo, establecimos lo siguiente previamente:
+\begin{enumerate}
+    \item En lugar de utilizar variables de decisión binarias, donde es un simplemente \textbf{si} o \textbf{no} para cada jugador, consideramos a los jugadores como variables de decisión continuas, siendo estas un número real en el rango $[0, 1]$, representando la probabilidad de seleccionar cada jugador.
+    \[ 0 \leq X_{player} \leq 1, X_{player} \in R \]
+    \item Para restringir las variables, utilizamos la misma inecuación que en el código anterior. Sin embargo, al tratarse de variables reales, establecimos esta misma restricción para garantizar que al menos una fracción total de un jugador en el subconjunto sea seleccionada en la solución óptima.
+    \[ \forall subset: \sum\limits_{player} X_{player} \geq 1 \]
+    \item Finalmente, para minimizar la cantidad de jugadores que estarán en la solución óptima, se debe minimizar la suma de todas las variables: $min \sum X_{player}$.
+\end{enumerate}
+
+Ahora bien, al resolver el problema relajando la condición de las variables nos genera un resultado distinto al anterior. Entonces, ¿cómo es posible aprovechar la solución con este método para obtener una solución válida? En el caso de que la solución con variables continuas nos indique la existencia de variables iguales a 0, estas no se incluirán en la respuesta. Por el contrario, si sus valores son iguales a 1, sí lo estarán definitivamente. Finalmente, las que se encuentran en un rango intermedio se las añadirán a la respuesta si superan o igualan un valor de redondeo calculado previamente. Este valor equivale 1/b, siendo b la cantidad del subconjunto mayor de todos los pedidos por la prensa.
+
 \lstinputlisting[language=Python]{code/lpa.py}
 
-Para utilizar el algoritmo propuesto por Bilardo, reutilizamos el código anterior haciendo algunas modificaciones:
+En cuanto al código, para esta propuesta decidimos reutilizar parte del anterior haciendo unas alteraciones:
 \begin{itemize}
-	\item En lugar de variables de decisión binarias, donde es un simplemente sí o no para cada jugador, utilizamos variables de decisión continuas, siendo estas un número entre 0 y 1, que representa la probabilidad de seleccionar aquél jugador.
-	\item Luego de resolver el problema y de obtener las probabilidades de selección para cada jugador, procedimos a redondear aquellas probabilidades:
-    	Para decidir a quién seleccionar definitivamente, comparamos las probabilidades redondeadas con un umbral calculado, un número b en función de la cantidad de jugadores que tiene el subconjunto más grande.
-	Si la probabilidad de un jugador es mayor o igual a 1/b, se lo agrega a la solución redondeada.
+	\item (1) \texttt{Asignación de variables}: creamos variables continuas para cada jugador, quienes pueden tener cualquier valor de 0 hasta 1 inclusive.
+	\item (5) \texttt{Extracción de la solución continua}: una vez resuelto el problema lineal, obtuvimos la solución continua, siendo esta una lista que incluye los jugadores seleccionados con sus valores de decisión.
+    \item (6) \texttt{Cálculo del valor de “b”}: le asignamos a “b” el valor de la cantidad del subconjunto más largo de jugadores entre todos los que están en el conjunto.
+    \item (7) \texttt{Solución redondeada}: obtuvimos la solución final redondeada, donde planteamos previamente que si un jugador tiene un valor mayor o igual a 1/b, se lo debe de agregar a la respuesta.
 \end{itemize}
 
-Con respecto a la complejidad, la complejidad total del algoritmo es de $\mathcal{O}(N+M)$, donde $N$ es la cantidad de conjuntos y $M$ es la cantidad total de jugadores en esos conjuntos.
+Al considerar parte de la solución a todos los valores mayores o iguales a 1/b, es posible demostrar que este valor de redondeo está bien definido ya que b al ser el subconjunto mayor, cuando se realice la sumatoria de todas las variables dentro de cualquier subconjunto $\sum\limits_{player} X_{player} \geq 1$, además de que el resultado tenga que valer 1 o más, con dicho valor nos aseguramos que por lo menos un jugador de un subconjunto esté incluído en la respuesta final. Esto se debe a que en el peor caso de que estemos analizando el subconjunto más largo de valor b, si todas las variables tienen un valor de $1/b$ (por lo tanto la sumatoria resultaría igual a 1), deben estar todas en la solución para cumplir con la restricción impuesta. En cambio, si se elije un valor menor de redondeo, ninguna de estas variables formaría parte de la solución, lo que en este caso sería erróneo. Otra razón es que con esta restricción, algún $X_{player}$ de cada subconjunto tomará un valor mayor o igual a $1/b$ obligatoriamente. En consecuencia, este formará parte del set para asegurarnos de que el subset esté hitteado.
 
-Algoritmo para calcular el ratio de aproximacion:
+Relacionando lo dicho anteriormente con la complejidad temporal de nuestro algoritmo,
+siendo:
+\begin{itemize}
+    \item \texttt{W(S*)}: el costo de la solución óptima por programación lineal entera.
+    \item \texttt{$W_{LP}$}: el costo de la solución continua por programación lineal.
+    \item  \texttt{W(S)}: el costo de la solución redondeada.
+    \item \texttt{b}: largo del subconjunto mayor del conjunto,
+\end{itemize}
+
+Llegamos a la conclusión de que la solución continua propuesta con programación lineal cuesta 1/b o más del costo por cada variable que se incluye a la respuesta ($W_{LP}$, contrastando con la solución redondeada que requiere de un costo total por cada variable incluída $W(S)$. Por lo tanto
+\[ W_{LP} = \dfrac{1}{b} W(S) \Rightarrow b W_{LP} = W(S) \]
+
+A su vez, el problema resuelto en el punto 4 se considera que es uno del tipo NP-COMPLETO. Sin embargo, al relajar las condiciones de la variables en el punto 5, donde las variables del punto previo que solamente podían valer 0 y 1 (condición fuerte) pasaron a valer un número cualquiera entre ese rango (condición un poco más relajada), logramos reducir el costo de la solución aproximada con respecto a la óptima:
+\[ W_{LP} \leq W(S*) \]
+
+Finalmente, concluímos que el costo de una solución redondeada que es como mucho $b$ veces peor que el del óptimo $S*$.
+\[ W(S) \leq b W(S*) \]
+
+Una vez hallada esta última relación y sabiendo según el enunciado que:
+\begin{itemize}
+    \item \texttt{I}: instancia cualquiera del Hitting-Set Problem.
+    \item \texttt{z(I)}: solución óptima para dicha instancia.
+    \item \texttt{A(I)}: solución aproximada para dicha instancia
+    \item \texttt{r(A)}: ratio de la solución aproximada
+\end{itemize}
+
+\[ \dfrac{A(I)}{z(I)} \leq r(A) \]
+
+Con todas estas relaciones, concluímos que el ratio de aproximación es equivalente a al valor de b.
+\[ z(I) = W(S*), A(I) = W(S) \Rightarrow W(S) \leq b W(S*) \Rightarrow A(I) \leq b z(I) \Rightarrow \dfrac{A(I)}{z(I)} \leq b \Rightarrow b = r(A) \]
+
+Como resultado final, esta aproximación es una \textit{b-aproximación}.
+
+Para respaldar este resultado y analizar cuán acertada es la aproximación, realizamos
+una serie de mediciones utilizando el siguiente algoritmo para calcular el ratio de la
+aproximación:
 
 \lstinputlisting[language=Python]{code/approx_analisis.py}
 
-En cuanto a la medición de cuán buena es la aproximación, calculamos el ratio de aproximación, siendo este un valor menor o igual a la división de la solución aproximada sobre la solución óptima. Los resultados obtenidos en cada caso fueron los siguientes ($r(A)$: ratio de aproximación):
+Los resultados obtenidos son los siguientes:
 \begin{itemize}
 	\item \texttt{N = 7}: $r(A)$ = 1.0
 	\item \texttt{N = 10}: $r(A)$ = 1.0
 	\item \texttt{N = 15}: $r(A)$ = 2.75
-	\item \texttt{N = 15}: $r(A)$ = 2.55
-	\item \texttt{N = 15}: $r(A)$ = 3.0
+	\item \texttt{N = 100}: $r(A)$ = 2.55
+	\item \texttt{N = 200}: $r(A)$ = 3.0
 \end{itemize}
 
-Como se puede observar, el ratio $r(A)$ vale 1.0 en los primeros casos, lo que expresa que la aproximación es exacta, por lo tanto la cota utilizada está bien calculada. Sin embargo, al aumentar la cantidad de elementos considerablemente, el $r(A)$ aumenta, lo que refleja la magnitud de la diferencia entre el algoritmo aproximado con el óptimo.
+Como se observa, el $r(A)$ vale 1.0 en los primeros casos, expresando que la aproximación es exacta. Sin embargo, al aumentar la cantidad de elementos paulatinamente, el ratio también lo hace, lo que refleja la magnitud de la diferencia entre el algoritmo aproximado con el óptimo. No obstante, este número ningún caso llega a superar la cota calculada previamente, indicando su efectividad.
 
 \subsection{Algoritmo Greedy}
 
@@ -107,7 +152,7 @@ Ahora bien, nuestra regla sencilla se basó en lo siguiente:
     \item En caso de que la actual iteración sea de un medio que ya está considerado ya que uno de sus jugadores fue tomado en cuenta, se continuará sin analizarlo.
 \end{itemize}
 
-Esto hará lo mejor posible teniendo en cuenta la información actual del programa ya que siempre buscará el mejor jugador que pueda satisfacer la mayor cantidad de medios posibles.
+Esto hace que nuestro algoritmo sea Greedy, ya que siempre buscará el mejor jugador que pueda satisfacer la mayor cantidad de medios posibles según la situación actual del programa, y de esta manera poder disminuir la cantidad de jugadores totales que se deben elegir para minimizar la solución siguiendo nuestra regla planteada.
 
 El código es el siguiente:
 
@@ -123,3 +168,12 @@ El código funciona de la siguiente manera:
 \end{itemize}
 
 La complejidad de dicho algoritmo es $\mathcal{O}\left(n^2 \times m^2\right)$ siendo $n$ la cantidad de subsets (pedidos de los medios) y $m$ la cantidad de elementos (jugadores) ya que por cada subset se itera cada elemento, y por cada elemento se itera $n-1$ subsets y por cada uno de esos subsets todos sus elementos.
+
+Ahora bien, el algoritmo no es el optimo. Esto es debido a que depende mucho del orden de entrada de los subconjuntos, ya que siempre buscara al jugador que mas subconjuntos nos abarque a partir del suyo, pudiendo eliminar una posible solucion que sea seleccionar uno que abarque menos, pero que despues permita seleccionar otro jugador de otro subconjunto que este mas adelante que elimine mucho mas subconjuntos.
+
+Por ejemplo:
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.9\textwidth]{img/greedyCmp.png}
+\end{figure}

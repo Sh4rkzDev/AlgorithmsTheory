@@ -1,3 +1,4 @@
+from time import time
 import input
 
 def elementosEnComun(listaA, listaB):
@@ -9,20 +10,19 @@ def elementosEnComun(listaA, listaB):
             return True
     return False
 
-def BT2(A, jugadores, soluciones, n, utilizados, minimo):
+def BT2(A, jugadores, solucion, n, utilizados):
 
     if n == len(A):                 #Ya revise todas las listas que habian
         copia = jugadores[:]
-        minimo[0] = len(copia)
-        soluciones.append(copia)
-        return
-    
-    if len(jugadores) >= minimo[0]:   #Hago mayor igual porque si esta aca es porque va a iterar devuelta
-        return
+        solucion[0] = copia
+        return solucion
+
+    if len(solucion[0]) != 0 and len(jugadores) >= len(solucion[0]):   #Hago mayor igual porque si esta aca es porque va a iterar devuelta
+        return solucion
 
     if (elementosEnComun(A[n], jugadores)):
-        BT2(A, jugadores, soluciones, n+1, utilizados, minimo)
-        return
+        BT2(A, jugadores, solucion, n+1, utilizados)
+        return solucion
 
     for jugador in A[n]:
         if jugador in utilizados:
@@ -30,18 +30,23 @@ def BT2(A, jugadores, soluciones, n, utilizados, minimo):
         else:
             utilizados[jugador] = n
         jugadores.append(jugador)
-        BT2(A, jugadores, soluciones, n+1, utilizados, minimo)
+        BT2(A, jugadores, solucion, n+1, utilizados)
         jugadores.remove(jugador)
 
-    return soluciones
+    return solucion
 
 def solucionOptima(A):
-    soluciones = BT2(A,[],[],0,{},[float("inf")])
-    return min(soluciones,key=lambda item:len(item))
+    solucion = BT2(A,[],[[]],0,{})
+    return solucion[0]
 
 def main():
     A = input.ReadInputs()
-    solucionOptima(A)
+    start = time()
+    sol = solucionOptima(A)
+    end = time()
+    print("The solution by Backtracking took ", end-start, "sec")
+    print("Size of solution: ", len(sol))
+    print(', '.join(sol))
 
 if __name__ == "__main__":
     main()

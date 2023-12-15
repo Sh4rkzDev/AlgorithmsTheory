@@ -69,6 +69,13 @@ Ya que con lo que debemos cumplir son los subconjuntos $B_i$ que haya al menos u
     \item Habrá tantos subconjuntos $B_i$ como vértices en el grafo, y el tamaño de estos subconjuntos será la cantidad de adyacentes que tenga el vértice a partir del cual se genero el subconjunto.
 \end{itemize}
 
+Por ejemplo para los siguientes grafos, les correspondera los siguientes subconjuntos:
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.9\textwidth]{img/dshs.png}
+\end{figure}
+
 De esta manera, una vez creados todos los subconjuntos $B_i$, al pasar a la ''caja negra'' que resuelve el Hitting-Set nuestro conjunto y un valor $k$, nos devolverá si existe o no una solución la cual contenga como mucho $k$ elementos, que ''interpretado'' a nuestro problema original del Dominating-Set, que existan como mucho $k$ vértices pertenecientes al conjunto $D$. Una vez obtenida la salida de nuestra ''caja negra'' que diga si existe o no una solución al problema, podría hacerse un estilo de \textit{Búsqueda Binaria} para encontrar el conjunto mínimo del Dominating-Set.
 
 Al ser Dominating-Set un problema \texttt{NP-Completo}, por propiedad de la transitividad, queda demostrado que el $Hitting-Set \subset \texttt{NP-Completo}$.

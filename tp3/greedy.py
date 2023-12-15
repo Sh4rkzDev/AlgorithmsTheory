@@ -1,3 +1,6 @@
+from time import time
+import input
+
 def hittingSetGreedy(b):
     res = []
     considered = set()
@@ -23,3 +26,16 @@ def hittingSetGreedy(b):
             considered.add(b[i])
         res.append(maxElem)
     return res
+
+def main():
+    b = input.ReadInputs()
+    start = time()
+    sol = hittingSetGreedy(b)
+    end = time()
+    print("The solution using Greedy algorithm took ", end-start, "sec")
+    print("Size of solution: ", len(sol))
+    print(', '.join(sol))
+
+if __name__ == "__main__":
+    main()
+

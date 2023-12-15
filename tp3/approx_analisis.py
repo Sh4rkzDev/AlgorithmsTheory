@@ -19,6 +19,5 @@ def perform_measurements(instances):
         approximation_ratio = calculate_approximation_ratio(len(optimal_solution), len(approx_solution))
         print(f"Approximation Ratio (r(A)): {approximation_ratio}\n")
 
-
 ruta = ["7.txt", "10_pocos.txt", "10_todos.txt", "10_varios.txt", "15.txt", "20.txt", "50.txt", "100.txt", "200.txt"]
 perform_measurements(ruta)

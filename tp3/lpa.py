@@ -1,3 +1,4 @@
+from time import time
 from pulp import LpVariable, LpProblem, LpMinimize, lpSum
 from pulp.apis import PULP_CBC_CMD
 import input
@@ -29,14 +30,19 @@ def lp_approx(sets):
 
     return rounded_solution, cont_solution
 
-def solution_lp_approx(listas = None):
-    if listas is None:
-        listas = input.ReadInputs()
+def solution_lp_approx(listas):
     sets_dict = {f'S{i + 1}': set(inner_list) for i, inner_list in enumerate(listas)}
     rounded,_ = lp_approx(sets_dict)
     return rounded
 
-if __name__ == "__main__":
-    res = solution_lp_approx()
+def main():
+    sets = input.ReadInputs()
+    start = time()
+    res = solution_lp_approx(sets)
+    end = time()
+    print("The solution using Linear Programming (approximated) took ", end-start, "sec")
     print("Size of solution: ", len(res))
-    print(res)
+    print(', '.join(res))
+
+if __name__ == "__main__":
+    main()

@@ -1,6 +1,7 @@
+from time import time
 from pulp.apis import PULP_CBC_CMD
 import input
-from pulp import LpProblem, LpMinimize, LpVariable, lpSum, PULP_CBC_CMD
+from pulp import LpProblem, LpMinimize, LpVariable, lpSum
 
 def hitting_set_lp(sets):
     # 1) We create binary variables for each player
@@ -32,7 +33,13 @@ def solution_lp(listas = None):
     sets_dict = {f'S{i + 1}': set(inner_list) for i, inner_list in enumerate(listas)}
     return hitting_set_lp(sets_dict)
 
-if __name__ == "__main__":
+def main():
+    start = time()
     res = solution_lp()
+    end = time()
+    print("The solution using Linear Programming took ", end-start, "sec")
     print("Size of solution: ", len(res))
-    print(res)
+    print(', '.join(res))
+
+if __name__ == "__main__":
+    main()
